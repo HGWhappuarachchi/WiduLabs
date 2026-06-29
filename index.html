@@ -3,249 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinki | Widu Labs</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
-    
+    <title>Widu Labs | Calibrated Valuation Matrix</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --bg-base: #F8F9FA;
-            --surface-white: #FFFFFF;
-            --text-primary: #202124;
-            --text-secondary: #5F6368;
-            --border-light: #DADCE0;
-            --cta-blue: #1A73E8;
-            --cta-hover: #174EA6;
-            --shadow-float: 0 2px 6px rgba(60,64,67,0.08), 0 4px 12px rgba(60,64,67,0.05);
-            --shadow-elevation-1: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-            --shadow-elevation-2: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
-            --nav-height: 60px;
+            --primary: #0f172a;       
+            --accent: #2563eb;        
+            --bg-main: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
+            --border-heavy: #0f172a;
+            --border-light: #cbd5e1;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
-        body { font-family: 'Roboto', Arial, sans-serif; background-color: var(--bg-base); color: var(--text-primary); line-height: 1.5; overflow-x: hidden; }
-
-        h1 { font-size: 3.5rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 16px; color: var(--text-primary); }
-        h2 { font-size: 2.5rem; font-weight: 500; letter-spacing: -0.01em; margin-bottom: 12px; }
-        h3 { font-size: 1.5rem; font-weight: 500; margin-bottom: 8px; }
-        p { font-size: 1.125rem; color: var(--text-secondary); max-width: 650px; margin: 0 auto; }
-        
-        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
-
-        nav { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 32px); max-width: 1400px; height: var(--nav-height); background-color: var(--surface-white); display: flex; justify-content: space-between; align-items: center; padding: 0 16px 0 24px; border-radius: 100px; box-shadow: var(--shadow-float); z-index: 1000; }
-        .nav-left { display: flex; align-items: center; }
-        .nav-left img { height: 40px; width: auto; margin-right: 8px; }
-        
-        .nav-links { display: flex; align-items: center; gap: 32px; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
-        .nav-links a:hover { color: var(--text-primary); }
-        .nav-links a.active-link { color: var(--text-primary); border-bottom: 2px solid var(--cta-blue); padding-bottom: 4px; }
-        
-        .nav-icons { display: flex; align-items: center; gap: 16px; color: var(--text-secondary); }
-        .nav-icons .material-symbols-outlined { font-size: 24px; cursor: pointer; transition: color 0.2s; }
-        .nav-icons .material-symbols-outlined:hover { color: var(--text-primary); }
-
-        .btn-primary { background-color: var(--cta-blue); color: #FFFFFF !important; padding: 10px 24px; border-radius: 100px; font-size: 14px; font-weight: 500; text-decoration: none; border: none; cursor: pointer; transition: background-color 0.2s, box-shadow 0.2s; white-space: nowrap; }
-        .btn-primary:hover { background-color: var(--cta-hover); box-shadow: var(--shadow-elevation-1); }
-
-        .hero { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 140px 24px 60px; background: linear-gradient(180deg, #E5F0E6 0%, var(--bg-base) 100%); }
-        .hero-img { width: 100%; max-width: 1100px; height: auto; border-radius: 16px; margin-top: 40px; box-shadow: var(--shadow-elevation-2); object-fit: cover; }
-
-        .features-container { max-width: 1200px; margin: 0 auto; padding: 60px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-        .feature-card { background-color: var(--surface-white); border: 1px solid var(--border-light); border-radius: 24px; padding: 40px; display: flex; flex-direction: column; transition: box-shadow 0.3s, transform 0.3s; }
-        .feature-card:hover { box-shadow: var(--shadow-elevation-2); transform: translateY(-4px); }
-        
-        /* FIXED: Removed fixed height, added proportional aspect ratio */
-        .feature-img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: center; border-radius: 12px; margin-bottom: 32px; background-color: var(--bg-base); }
-
-        .specs-section { background-color: var(--surface-white); padding: 80px 24px; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); text-align: center; }
-        .specs-wrapper { max-width: 800px; margin: 0 auto; text-align: left; }
-        .specs-section h2, .specs-section p { text-align: center; }
-        .specs-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; margin-top: 40px; border-top: 1px solid var(--border-light); padding-top: 24px; }
-        .spec-row { display: contents; }
-        .spec-row span:first-child { color: var(--text-primary); font-weight: 500; padding-bottom: 24px; border-bottom: 1px solid var(--border-light); }
-        .spec-row span:last-child { color: var(--text-secondary); padding-bottom: 24px; border-bottom: 1px solid var(--border-light); }
-
-        .conversion { text-align: center; padding: 120px 24px; background-color: var(--bg-base); }
-        .form-group { display: flex; max-width: 450px; margin: 40px auto 0; gap: 12px; }
-        .form-group input { flex: 1; padding: 14px 16px; border: 1px solid var(--border-light); border-radius: 8px; font-size: 16px; outline: none; transition: border-color 0.2s; }
-        .form-group input:focus { border-color: var(--cta-blue); box-shadow: 0 0 0 1px var(--cta-blue); }
-
-        footer { background-color: var(--surface-white); border-top: 1px solid var(--border-light); padding: 60px 24px 24px; }
-        .footer-content { max-width: 1200px; margin: 0 auto; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 60px; }
-        .footer-column h4 { font-size: 14px; font-weight: 500; color: var(--text-primary); margin-bottom: 20px; }
-        .footer-column a { display: block; color: var(--text-secondary); text-decoration: none; font-size: 14px; margin-bottom: 12px; transition: color 0.2s; }
-        .footer-column a:hover { color: var(--text-primary); }
-        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 24px; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 20px; }
-        .footer-locale { display: flex; align-items: center; gap: 8px; color: var(--text-secondary); font-size: 14px; }
-        .footer-locale .material-symbols-outlined { font-size: 18px; }
-        .footer-legal-links { display: flex; gap: 24px; flex-wrap: wrap; }
-        .footer-legal-links a { color: var(--text-secondary); text-decoration: none; font-size: 12px; }
-        .footer-legal-links a:hover { color: var(--text-primary); }
-        .footer-copyright { font-size: 12px; color: var(--text-secondary); }
-
-        @media (max-width: 768px) {
-            .nav-links, .nav-icons { display: none; }
-            nav { padding: 0 12px 0 20px; }
-            .btn-primary { padding: 8px 20px; }
-            h1 { font-size: 2.25rem; } h2 { font-size: 1.75rem; } p { font-size: 1rem; }
-            .hero { padding: 110px 20px 40px; }
-            .features-container { padding: 40px 20px; grid-template-columns: 1fr; }
-            .feature-card { padding: 24px; border-radius: 16px; }
-            .specs-section { padding: 60px 20px; } .conversion { padding: 60px 20px; }
-            footer { padding: 40px 20px 20px; }
-            .specs-grid { grid-template-columns: 1fr; gap: 8px; }
-            .spec-row span:first-child { border-bottom: none; padding-bottom: 0; color: var(--text-secondary); font-size: 0.85rem; }
-            .spec-row span:last-child { padding-bottom: 16px; font-weight: 500; color: var(--text-primary); }
-            .form-group { flex-direction: column; width: 100%; } .form-group input, .form-group button { width: 100%; }
-            .footer-grid { grid-template-columns: 1fr; gap: 30px; margin-bottom: 40px; }
-            .footer-bottom { flex-direction: column; align-items: flex-start; } .footer-legal-links { flex-direction: column; gap: 12px; }
+        body {
+            font-family: 'Courier New', Courier, monospace, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
         }
+
+        .panel {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--border-heavy);
+            width: 100%;
+            max-width: 420px;
+            box-sizing: border-box;
+        }
+
+        h2, h3 { margin-top: 0; color: var(--text-dark); font-weight: 700; letter-spacing: 0.5px; }
+        h2 { border-bottom: 2px solid var(--border-heavy); padding-bottom: 10px; margin-bottom: 25px; }
+
+        .input-group { margin-bottom: 18px; }
+        label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            box-sizing: border-box;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            transition: border 0.2s;
+            background-color: white;
+        }
+        input:focus, select:focus { border-color: var(--accent); outline: none; }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .checkbox-group input { width: auto; cursor: pointer; }
+        .checkbox-group label { margin-bottom: 0; cursor: pointer; }
+
+        .time-inputs { display: flex; gap: 12px; }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        button:hover { background-color: #1e293b; }
+        .btn-secondary { background-color: transparent; color: var(--primary); border: 2px solid var(--border-heavy); }
+        .btn-secondary:hover { background-color: var(--border-heavy); color: white; }
+        button:disabled { background-color: #94a3b8; border-color: #94a3b8; cursor: not-allowed; color: #cbd5e1; }
+
+        /* Heavy Industrial/Official Invoice Design */
+        #invoice-container {
+            width: 100%;
+            max-width: 540px;
+        }
+        
+        .invoice-card {
+            background: white;
+            padding: 45px;
+            border: 4px solid var(--border-heavy);
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .invoice-header { text-align: left; margin-bottom: 35px; border-bottom: 3px solid var(--border-heavy); padding-bottom: 20px; }
+        .invoice-header h3 { font-size: 1.8rem; margin: 0 0 5px 0; letter-spacing: 2px; font-family: 'Courier New', Courier, monospace; font-weight: 900; }
+        .invoice-header p { margin: 3px 0; font-size: 0.85rem; color: var(--text-muted); font-weight: bold; }
+        .serial-no { font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; text-align: right; margin-top: -20px; margin-bottom: 20px; font-weight: bold;}
+
+        .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.82rem; }
+        .invoice-table th { text-align: left; color: white; background-color: var(--border-heavy); font-weight: 600; padding: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .invoice-table td { padding: 12px 10px; border-bottom: 1px solid #94a3b8; line-height: 1.3; }
+        .invoice-table td.right { text-align: right; font-weight: bold; white-space: nowrap; }
+        
+        .invoice-total-row { font-size: 1.15rem; font-weight: bold; color: #000; font-family: 'Courier New', Courier, monospace; }
+        .invoice-total-row td { border-bottom: 4px double #000; border-top: 2px solid #000; padding-top: 15px; background-color: #f8fafc; }
+        
+        .discount-row { color: #dc2626; }
+        .delivery-row { color: #1e3a8a; }
+
+        /* Bank Remittance Settlement Block */
+        .remittance-block {
+            margin-top: 25px;
+            border: 1px solid var(--border-heavy);
+            padding: 15px;
+            background-color: #f8fafc;
+            font-size: 0.78rem;
+            line-height: 1.4;
+        }
+        .remittance-title {
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-heavy);
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .invoice-footer { text-align: center; margin-top: 35px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-light); padding-top: 15px; }
+        .stamp { border: 2px dashed #dc2626; color: #dc2626; text-transform: uppercase; font-size: 0.7rem; font-weight: bold; display: inline-block; padding: 4px 8px; transform: rotate(-5deg); position: absolute; bottom: 175px; right: 45px; opacity: 0.85; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="nav-left">
-            <a href="index.html"><img src="WiduLabs.png" alt="Widu Labs Logo"></a>
-        </div>
-        <div class="nav-links hide-mobile">
-            <a href="index.html#overview" class="active-link">Overview</a>
-           <!-- <a href="index.html#tech-specs">Tech Specs</a> -->
-            <a href="about.html">About Widu Labs</a>
-        </div>
-       
-        <a href="#waitlist" class="btn-primary">Join Waitlist</a>
-    </nav>
-
-    <main>
-        <section class="hero reveal" id="overview">
-            <h1>Your desk just got a pulse.</h1>
-            <p>Meet Pinki. The touch-reactive, 70mm desktop companion engineered with precision to keep you anchored and focused.</p>
-            <img class="hero-img" src="MainImage.png" alt="Pinki Companion Device">
-        </section>
-
-        <section class="features-container">
-            <div class="feature-card reveal">
-                <img class="feature-img" src="ProdctSde.png" alt="Smooth Side Profile">
-                <h3>Seamless geometry</h3>
-                <p>Internal copper pads detect proximity right through the 3mm shell. No physical buttons—just seamless, native capacitive zones across the refined dome.</p>
+    <div class="panel">
+        <h2>System Parameters</h2>
+        <form id="costForm">
+            <div class="input-group">
+                <label for="pricePerKg">Filament Inventory Unit Cost (LKR/kg):</label>
+                <input type="number" id="pricePerKg" value="6000" step="0.01" required>
             </div>
             
-            <div class="feature-card reveal">
-                <img class="feature-img" src="Colsep(1).png" alt="Screen Close Up">
-                <h3>High-fidelity gaze</h3>
-                <p>Driven by a custom physics engine running on dual cores, the IPS display delivers fluid, 60fps animations in high contrast.</p>
-            </div>
-
-            <div class="feature-card reveal">
-                <img class="feature-img" src="Colsep.png" alt="Chassis Base Profile">
-                <h3>Unburdened aesthetic</h3>
-                <p>Perfectly balanced. Engineered with a solid ballast weight and a clean base that keeps the companion securely anchored without distractions.</p>
-            </div>
-        </section>
-
-        <!-- <section class="specs-section reveal" id="tech-specs">
-            <div class="specs-wrapper">
-                <h2>Raw hardware.</h2>
-                <p>Moving from digital logic to embedded C++ and precision manufacturing. This is an engineered piece of functional architecture.</p>
-                
-                <div class="specs-grid">
-                    <div class="spec-row">
-                        <span>Microcontroller</span>
-                        <span>ESP32-S3 (Dual-Core Xtensa LX7)</span>
-                    </div>
-                    <div class="spec-row">
-                        <span>Display Unit</span>
-                        <span>1.28" Round IPS LCD (240x240)</span>
-                    </div>
-                    <div class="spec-row">
-                        <span>Data Interface</span>
-                        <span>Hardware SPI with Direct Memory Access (DMA)</span>
-                    </div>
-                    <div class="spec-row">
-                        <span>Sensory Input</span>
-                        <span>3x Native Capacitive Touch Zones</span>
-                    </div>
-                    <div class="spec-row">
-                        <span>Chassis Build</span>
-                        <span>Precision blended shell (70mm diameter)</span>
-                    </div>
-                </div>
-            </div>
-        </section> -->
-
-        <section class="conversion reveal" id="waitlist">
-            <h2>Secure Batch 01.</h2>
-            <p>Manufacturing quantities are strictly limited. Enter your email to be notified the exact moment checkout goes live.</p>
-            
-            <form class="form-group" onsubmit="event.preventDefault();">
-                <input type="email" placeholder="Enter your email address" required>
-                <button type="submit" class="btn-primary" style="font-size: 16px; padding: 14px 32px;">Join</button>
-            </form>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <h4>Widu Labs</h4>
-                    <a href="index.html#overview">Meet Pinki</a>
-                    <a href="index.html#tech-specs">Engineering specs</a>
-                    <a href="about.html">About the Lab</a>
-                </div>
-                <!-- <div class="footer-column">
-                    <h4>Support</h4>
-                    <a href="#">Firmware (GitHub)</a>
-                    <a href="#">Documentation</a>
-                    <a href="mailto:hello@widulabs.com">Contact us</a>
-                </div> -->
-                <div class="footer-column">
-                    <h4>Legal</h4>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Hardware Warranty</a>
-                </div>
+            <div class="input-group">
+                <label for="weight">Net Structural Weight (Grams):</label>
+                <input type="number" id="weight" placeholder="0.000" step="0.001" required>
             </div>
             
-            <div class="footer-bottom">
-                <div class="footer-locale">
-                    <span class="material-symbols-outlined">public</span>
-                    <span>Sri Lanka</span>
+            <div class="input-group">
+                <label>Operational Duty Cycle:</label>
+                <div class="time-inputs">
+                    <input type="number" id="hours" min="0" placeholder="Hours" required>
+                    <input type="number" id="minutes" min="0" max="59" placeholder="Minutes" required>
                 </div>
-                <div class="footer-legal-links">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                </div>
-                <div class="footer-copyright">
-                    &copy; 2026 Widu Labs. Designed in Sri Lanka.
-                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="discountType">Authorized Concession Tier:</label>
+                <select id="discountType">
+                    <option value="0">None (Standard Rates)</option>
+                    <option value="0.05">First Print Discount (5%)</option>
+                    <option value="0.10">Long Term Discount (10%)</option>
+                    <option value="0.15">Friends Concession (15%)</option>
+                    <option value="0.20">Family Allocation (20%)</option>
+                </select>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="includeDelivery">
+                <label for="includeDelivery">Apply Delivery Fee (460.00 LKR)</label>
+            </div>
+            
+            <button type="button" id="calculateBtn">Compile Metrics</button>
+            <button type="button" id="downloadBtn" class="btn-secondary" disabled>Export Official Invoice</button>
+        </form>
+    </div>
+
+    <div id="invoice-container">
+        <div class="invoice-card" id="invoice-bill">
+            <div class="invoice-header">
+                <h3>WIDU LABS</h3>
+                <p>Additive Manufacturing & Prototyping Division</p>
+                <p id="invoice-date">Date: --/--/----</p>
+            </div>
+            
+            <div class="serial-no" id="bill-serial">DOC-REF: #PENDING</div>
+            
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Resource Allocation / Valuation Metric</th>
+                        <th class="right">Cost (LKR)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Material Consumption Allocation</strong><br><span style="color:#475569; font-size: 0.72rem;" id="lbl-weight">0.000g allocated</span></td>
+                        <td class="right" id="bill-material">0.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Machine Lifecycle & Utility Overhead</strong><br><span style="color:#475569; font-size: 0.72rem;" id="lbl-time">0h 0m total execution runtime</span></td>
+                        <td class="right" id="bill-operational">350.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pre-Processing & Slice Optimization</strong><br><span style="color:#475569; font-size: 0.72rem;">CAD verification, toolpath calculation, mesh healing</span></td>
+                        <td class="right" id="bill-preprocessing">100.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Post-Processing & Surface Engineering</strong><br><span style="color:#475569; font-size: 0.72rem;">Support structure separation, micro-abrasion, curing</span></td>
+                        <td class="right" id="bill-postprocessing">350.00</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Risk Mitigation & Quality Contingency</strong><br><span style="color:#475569; font-size: 0.72rem;">Bed adhesion margin, run-failure insurance fee</span></td>
+                        <td class="right" id="bill-risk">240.00</td>
+                    </tr>
+                    <tr class="delivery-row" id="invoice-delivery-row" style="display: none;">
+                        <td><strong>Logistics & Secure Delivery Fulfilment</strong><br><span style="color:#1e3a8a; font-size: 0.72rem;">Dispatched transit and packaging handling matrix</span></td>
+                        <td class="right" id="bill-delivery">460.00</td>
+                    </tr>
+                    <tr class="discount-row" id="invoice-discount-row" style="display: none;">
+                        <td><strong>Authorized Concession Concession</strong><br><span style="color:#dc2626; font-size: 0.72rem;" id="lbl-discount-type">Discounts applied</span></td>
+                        <td class="right" id="bill-discount">-0.00</td>
+                    </tr>
+                    <tr class="invoice-total-row">
+                        <td>TOTAL LIABILITY AMOUNT</td>
+                        <td class="right">LKR <span id="bill-total">0.00</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="remittance-block">
+                <div class="remittance-title">Remittance & Settlement Instructions</div>
+                <strong>Bank:</strong> Commercial Bank<br>
+                <strong>Account Name:</strong> H G W HAPUARACHCHI<br>
+                <strong>Branch:</strong> Hanwella<br>
+                <strong>Account Number:</strong> 8013050371<br>
+                <span style="color: var(--text-muted); font-size: 0.7rem; display:block; margin-top: 5px;">Please verify account parameters prior to balance transfer execution.</span>
+            </div>
+
+            <div class="stamp">Verified Ledger</div>
+
+            <div class="invoice-footer">
+                <p><strong>WIDU LABS INDUSTRIAL PROTOTYPING</strong></p>
+                <p>This document constitutes an official engineering valuation statement. All asset allocations are electronically logged and calculated under calibrated constraints.</p>
             </div>
         </div>
-    </footer>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
-                    }
-                });
-            }, {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            });
-
-            document.querySelectorAll('.reveal').forEach(element => {
-                observer.observe(element);
-            });
-        });
-    </script>
+    <script src="calculator.js"></script>
 </body>
 </html>
