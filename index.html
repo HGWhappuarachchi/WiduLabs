@@ -17,145 +17,65 @@
             --border-light: #cbd5e1;
         }
 
-        body {
-            font-family: 'Courier New', Courier, monospace, 'Segoe UI', sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-            background-color: var(--bg-main);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-
-        .panel {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 4px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            border: 2px solid var(--border-heavy);
-            width: 100%;
-            max-width: 420px;
-            box-sizing: border-box;
-        }
-
+        body { font-family: 'Courier New', Courier, monospace, 'Segoe UI', sans-serif; margin: 0; padding: 40px 20px; background-color: var(--bg-main); color: var(--text-dark); display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .panel { font-family: 'Segoe UI', sans-serif; background: var(--card-bg); padding: 30px; border-radius: 4px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border: 2px solid var(--border-heavy); width: 100%; max-width: 420px; box-sizing: border-box; }
         h2, h3 { margin-top: 0; color: var(--text-dark); font-weight: 700; letter-spacing: 0.5px; }
         h2 { border-bottom: 2px solid var(--border-heavy); padding-bottom: 10px; margin-bottom: 25px; }
-
         .input-group { margin-bottom: 18px; }
         label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
-        input, select {
-            width: 100%;
-            padding: 10px 12px;
-            box-sizing: border-box;
-            border: 1px solid var(--border-light);
-            border-radius: 4px;
-            font-size: 0.95rem;
-            transition: border 0.2s;
-            background-color: white;
-        }
+        input, select { width: 100%; padding: 10px 12px; box-sizing: border-box; border: 1px solid var(--border-light); border-radius: 4px; font-size: 0.95rem; transition: border 0.2s; background-color: white; }
         input:focus, select:focus { border-color: var(--accent); outline: none; }
-        
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
+        .checkbox-group { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
         .checkbox-group input { width: auto; cursor: pointer; }
         .checkbox-group label { margin-bottom: 0; cursor: pointer; }
-
         .time-inputs { display: flex; gap: 12px; }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary);
-            color: white;
-            border: 1px solid var(--primary);
-            border-radius: 4px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
+        button { width: 100%; padding: 12px; background-color: var(--primary); color: white; border: 1px solid var(--primary); border-radius: 4px; font-size: 0.95rem; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; text-transform: uppercase; }
         button:hover { background-color: #1e293b; }
         .btn-secondary { background-color: transparent; color: var(--primary); border: 2px solid var(--border-heavy); }
         .btn-secondary:hover { background-color: var(--border-heavy); color: white; }
         button:disabled { background-color: #94a3b8; border-color: #94a3b8; cursor: not-allowed; color: #cbd5e1; }
-
-        /* Heavy Industrial/Official Invoice Design */
-        #invoice-container {
-            width: 100%;
-            max-width: 540px;
-        }
         
-        .invoice-card {
-            background: white;
-            padding: 45px;
-            border: 4px solid var(--border-heavy);
-            box-sizing: border-box;
-            position: relative;
-        }
-
+        #invoice-container { width: 100%; max-width: 540px; }
+        .invoice-card { background: white; padding: 45px; border: 4px solid var(--border-heavy); box-sizing: border-box; position: relative; }
         .invoice-header { text-align: left; margin-bottom: 35px; border-bottom: 3px solid var(--border-heavy); padding-bottom: 20px; }
+        .invoice-header img.logo { max-height: 60px; float: right; }
         .invoice-header h3 { font-size: 1.8rem; margin: 0 0 5px 0; letter-spacing: 2px; font-family: 'Courier New', Courier, monospace; font-weight: 900; }
         .invoice-header p { margin: 3px 0; font-size: 0.85rem; color: var(--text-muted); font-weight: bold; }
         .serial-no { font-family: 'Courier New', Courier, monospace; font-size: 0.8rem; text-align: right; margin-top: -20px; margin-bottom: 20px; font-weight: bold;}
-
+        .client-name-display { font-family: 'Courier New', Courier, monospace; font-size: 0.9rem; font-weight: bold; color: var(--primary); margin-top: 10px; text-transform: uppercase; }
+        
         .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.82rem; }
         .invoice-table th { text-align: left; color: white; background-color: var(--border-heavy); font-weight: 600; padding: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
         .invoice-table td { padding: 12px 10px; border-bottom: 1px solid #94a3b8; line-height: 1.3; }
         .invoice-table td.right { text-align: right; font-weight: bold; white-space: nowrap; }
-        
         .invoice-total-row { font-size: 1.15rem; font-weight: bold; color: #000; font-family: 'Courier New', Courier, monospace; }
         .invoice-total-row td { border-bottom: 4px double #000; border-top: 2px solid #000; padding-top: 15px; background-color: #f8fafc; }
-        
         .discount-row { color: #dc2626; }
         .delivery-row { color: #1e3a8a; }
+        .delivery-free { color: #16a34a; font-weight: bold; }
 
-        /* Bank Remittance Settlement Block */
-        .remittance-block {
-            margin-top: 25px;
-            border: 1px solid var(--border-heavy);
-            padding: 15px;
-            background-color: #f8fafc;
-            font-size: 0.78rem;
-            line-height: 1.4;
-        }
-        .remittance-title {
-            font-weight: bold;
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border-heavy);
-            padding-bottom: 4px;
-            margin-bottom: 8px;
-            letter-spacing: 0.5px;
-        }
-
+        .remittance-block { margin-top: 25px; border: 1px solid var(--border-heavy); padding: 15px; background-color: #f8fafc; font-size: 0.78rem; line-height: 1.4; }
+        .remittance-title { font-weight: bold; text-transform: uppercase; border-bottom: 1px solid var(--border-heavy); padding-bottom: 4px; margin-bottom: 8px; letter-spacing: 0.5px; }
         .invoice-footer { text-align: center; margin-top: 35px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; border-top: 1px solid var(--border-light); padding-top: 15px; }
         .stamp { border: 2px dashed #dc2626; color: #dc2626; text-transform: uppercase; font-size: 0.7rem; font-weight: bold; display: inline-block; padding: 4px 8px; transform: rotate(-5deg); position: absolute; bottom: 175px; right: 45px; opacity: 0.85; }
     </style>
 </head>
 <body>
-
     <div class="panel">
         <h2>System Parameters</h2>
         <form id="costForm">
             <div class="input-group">
-                <label for="pricePerKg">Filament Inventory Unit Cost (LKR/kg):</label>
+                <label for="customerName">Client / Customer Name:</label>
+                <input type="text" id="customerName" placeholder="Enter Client Name" required>
+            </div>
+            <div class="input-group">
+                <label for="pricePerKg">Filament Base Cost (LKR/kg):</label>
                 <input type="number" id="pricePerKg" value="6000" step="0.01" required>
             </div>
-            
             <div class="input-group">
                 <label for="weight">Net Structural Weight (Grams):</label>
                 <input type="number" id="weight" placeholder="0.000" step="0.001" required>
             </div>
-            
             <div class="input-group">
                 <label>Operational Duty Cycle:</label>
                 <div class="time-inputs">
@@ -163,7 +83,6 @@
                     <input type="number" id="minutes" min="0" max="59" placeholder="Minutes" required>
                 </div>
             </div>
-
             <div class="input-group">
                 <label for="discountType">Authorized Concession Tier:</label>
                 <select id="discountType">
@@ -172,14 +91,14 @@
                     <option value="0.10">Long Term Discount (10%)</option>
                     <option value="0.15">Friends Concession (15%)</option>
                     <option value="0.20">Family Allocation (20%)</option>
+                    <option value="0.25">Bulk Manufacturing (25%)</option>
+                    <option value="0.30">Student / Educational (30%)</option>
                 </select>
             </div>
-
             <div class="checkbox-group">
                 <input type="checkbox" id="includeDelivery">
                 <label for="includeDelivery">Apply Delivery Fee (460.00 LKR)</label>
             </div>
-            
             <button type="button" id="calculateBtn">Compile Metrics</button>
             <button type="button" id="downloadBtn" class="btn-secondary" disabled>Export Official Invoice</button>
         </form>
@@ -188,11 +107,12 @@
     <div id="invoice-container">
         <div class="invoice-card" id="invoice-bill">
             <div class="invoice-header">
+                <img src="WiduLabs.png" alt="Widu Labs Logo" class="logo" onerror="this.style.display='none'">
                 <h3>WIDU LABS</h3>
                 <p>Additive Manufacturing & Prototyping Division</p>
                 <p id="invoice-date">Date: --/--/----</p>
+                <div class="client-name-display" id="bill-client">CLIENT: --</div>
             </div>
-            
             <div class="serial-no" id="bill-serial">DOC-REF: #PENDING</div>
             
             <table class="invoice-table">
@@ -204,31 +124,31 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Material Consumption Allocation</strong><br><span style="color:#475569; font-size: 0.72rem;" id="lbl-weight">0.000g allocated</span></td>
+                        <td><strong>Material Consumption (1.3x Markup)</strong><br><span style="color:#475569; font-size: 0.72rem;" id="lbl-weight">0.000g allocated</span></td>
                         <td class="right" id="bill-material">0.00</td>
                     </tr>
                     <tr>
-                        <td><strong>Machine Lifecycle & Utility Overhead</strong><br><span style="color:#475569; font-size: 0.72rem;" id="lbl-time">0h 0m total execution runtime</span></td>
-                        <td class="right" id="bill-operational">350.00</td>
+                        <td><strong>Machine Lifecycle & Active Execution</strong><br><span style="color:#475569; font-size: 0.72rem;" id="lbl-time">0h 0m total execution runtime @ 120/hr</span></td>
+                        <td class="right" id="bill-operational">0.00</td>
                     </tr>
                     <tr>
                         <td><strong>Pre-Processing & Slice Optimization</strong><br><span style="color:#475569; font-size: 0.72rem;">CAD verification, toolpath calculation, mesh healing</span></td>
                         <td class="right" id="bill-preprocessing">100.00</td>
                     </tr>
                     <tr>
-                        <td><strong>Post-Processing & Surface Engineering</strong><br><span style="color:#475569; font-size: 0.72rem;">Support structure separation, micro-abrasion, curing</span></td>
-                        <td class="right" id="bill-postprocessing">350.00</td>
+                        <td><strong>Post-Processing & Surface Engineering</strong><br><span style="color:#475569; font-size: 0.72rem;">Support separation, micro-abrasion</span></td>
+                        <td class="right" id="bill-postprocessing">250.00</td>
                     </tr>
                     <tr>
                         <td><strong>Risk Mitigation & Quality Contingency</strong><br><span style="color:#475569; font-size: 0.72rem;">Bed adhesion margin, run-failure insurance fee</span></td>
-                        <td class="right" id="bill-risk">240.00</td>
+                        <td class="right" id="bill-risk">150.00</td>
                     </tr>
-                    <tr class="delivery-row" id="invoice-delivery-row" style="display: none;">
-                        <td><strong>Logistics & Secure Delivery Fulfilment</strong><br><span style="color:#1e3a8a; font-size: 0.72rem;">Dispatched transit and packaging handling matrix</span></td>
-                        <td class="right" id="bill-delivery">460.00</td>
+                    <tr class="delivery-row" id="invoice-delivery-row">
+                        <td><strong>Logistics & Secure Delivery</strong><br><span style="color:#1e3a8a; font-size: 0.72rem;">Transit and packaging handling matrix</span></td>
+                        <td class="right" id="bill-delivery">FREE</td>
                     </tr>
                     <tr class="discount-row" id="invoice-discount-row" style="display: none;">
-                        <td><strong>Authorized Concession Concession</strong><br><span style="color:#dc2626; font-size: 0.72rem;" id="lbl-discount-type">Discounts applied</span></td>
+                        <td><strong>Authorized Concession</strong><br><span style="color:#dc2626; font-size: 0.72rem;" id="lbl-discount-type">Discounts applied</span></td>
                         <td class="right" id="bill-discount">-0.00</td>
                     </tr>
                     <tr class="invoice-total-row">
@@ -241,21 +161,16 @@
             <div class="remittance-block">
                 <div class="remittance-title">Remittance & Settlement Instructions</div>
                 <strong>Bank:</strong> Commercial Bank<br>
-                <strong>Account Name:</strong> H G W HAPUARACHCHI<br>
-                <strong>Branch:</strong> Hanwella<br>
+                <strong>Account Name:</strong> GANINDUWIDUSH HAPUARACHCHI<br>
                 <strong>Account Number:</strong> 8013050371<br>
-                <span style="color: var(--text-muted); font-size: 0.7rem; display:block; margin-top: 5px;">Please verify account parameters prior to balance transfer execution.</span>
             </div>
-
             <div class="stamp">Verified Ledger</div>
-
             <div class="invoice-footer">
                 <p><strong>WIDU LABS INDUSTRIAL PROTOTYPING</strong></p>
-                <p>This document constitutes an official engineering valuation statement. All asset allocations are electronically logged and calculated under calibrated constraints.</p>
+                <p>This document constitutes an official engineering valuation statement.</p>
             </div>
         </div>
     </div>
-
     <script src="calculator.js"></script>
 </body>
 </html>
