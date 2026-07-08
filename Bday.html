@@ -1,0 +1,2792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Girlfriend, Kv | Happy 24th Birthday</title>
+    
+    <!-- Premium Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Caveat:wght@400..700&display=swap" rel="stylesheet">
+    
+    <!-- GSAP for Smooth Scroll & Tweens -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+
+    <style>
+        :root {
+            --rose-dark: #120209;
+            --rose-mid: #2c0818;
+            --rose-light: #ffcbd5;
+            --gold: #f4e3c1;
+            --gold-bright: #ffd700;
+            --accent: #e63956;
+            --card-bg: #fefcf9;
+            --text-dark: #3c2d28;
+            --text-light: #f5eef0;
+            --glass: rgba(28, 6, 16, 0.82);
+            --shadow: 0 15px 40px rgba(0,0,0,0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--rose-dark) 0%, #070104 60%, #020001 100%);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Webkit scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020001;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 4px;
+        }
+
+        /* Particle Canvas */
+        #hearts-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        /* Room Dimmer overlay */
+        #theatre-dimmer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #000;
+            opacity: 0;
+            z-index: 900;
+            pointer-events: none;
+            transition: opacity 1.5s ease;
+        }
+
+        /* Floating Audio Control Panel & Visualizer */
+        #audio-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--glass);
+            border: 1px solid rgba(244, 227, 193, 0.28);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px 16px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #audio-panel.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #audio-toggle {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(230, 57, 86, 0.18);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        #audio-toggle:hover {
+            background: rgba(230, 57, 86, 0.35);
+            transform: scale(1.1);
+        }
+
+        #audio-toggle svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--accent);
+        }
+
+        #audio-panel.muted #audio-toggle svg {
+            fill: #888;
+        }
+
+        .visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 20px;
+            width: 25px;
+        }
+
+        .vis-bar {
+            width: 3px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 1px;
+            transition: height 0.05s ease;
+        }
+
+        /* Floating Interactive Controller Buttons */
+        .floating-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .floating-controls.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .ctrl-btn {
+            background: var(--glass);
+            border: 1px solid rgba(244, 227, 193, 0.25);
+            color: var(--gold);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ctrl-btn:hover {
+            border-color: var(--accent);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(230, 57, 86, 0.4);
+        }
+
+        .ctrl-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(230, 57, 86, 0.6);
+        }
+
+        /* ==========================================
+        /* WELCOME SCREEN: THE UNLOCK PUZZLE
+        /* ========================================== */
+        #intro-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, var(--rose-mid) 0%, var(--rose-dark) 100%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.2s cubic-bezier(0.7, 0, 0.3, 1), visibility 1.2s;
+        }
+
+        .envelope-container {
+            width: 90%;
+            max-width: 480px;
+            perspective: 1200px;
+            text-align: center;
+        }
+
+        .envelope-card {
+            width: 100%;
+            background: var(--glass);
+            border: 1px solid rgba(244, 227, 193, 0.28);
+            border-radius: 28px;
+            padding: 45px 30px;
+            box-shadow: 0 35px 75px rgba(0,0,0,0.65), inset 0 0 35px rgba(255,203,213,0.06);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+            position: relative;
+            user-select: none;
+        }
+
+        .envelope-header {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 12px;
+            line-height: 1.35;
+        }
+
+        .envelope-sub {
+            font-size: 0.8rem;
+            color: var(--rose-light);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            display: block;
+        }
+
+        /* Ornate Lock & Key Puzzle UI */
+        .puzzle-box {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            margin: 25px 0;
+            background: rgba(10, 2, 6, 0.4);
+            border-radius: 16px;
+            border: 1px dashed rgba(244, 227, 193, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            touch-action: none; /* Prevents scrolling while dragging */
+        }
+
+        .heart-lock {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.4));
+            transition: transform 0.3s ease;
+        }
+
+        .heart-lock svg {
+            width: 100%;
+            height: 100%;
+            fill: #aa142c;
+            stroke: var(--gold);
+            stroke-width: 1.5;
+            transition: fill 0.4s ease;
+        }
+
+        .heart-lock.unlocked svg {
+            fill: #e63956;
+            filter: drop-shadow(0 0 15px rgba(230, 57, 86, 0.7));
+        }
+
+        .key-draggable {
+            position: absolute;
+            left: 40px;
+            top: 50px;
+            width: 80px;
+            height: 80px;
+            cursor: grab;
+            z-index: 10;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            touch-action: none;
+        }
+
+        .key-draggable:active {
+            cursor: grabbing;
+        }
+
+        .key-draggable svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--gold);
+            transition: fill 0.3s ease, transform 0.5s ease;
+        }
+
+        .key-draggable.snapped svg {
+            fill: var(--gold-bright);
+            transform: rotate(90deg) scale(1.05);
+        }
+
+        .puzzle-instruction {
+            font-size: 0.8rem;
+            color: var(--gold);
+            letter-spacing: 2px;
+            margin-top: 15px;
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* ==========================================
+        /* MAIN CONTENT SECTION
+        /* ========================================== */
+        #main-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            opacity: 0;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 85px 20px;
+        }
+
+        header.romantic-header {
+            text-align: center;
+            max-width: 750px;
+            margin-bottom: 95px;
+        }
+
+        .header-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #ffffff 20%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            line-height: 1.25;
+        }
+
+        .header-subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: 2.5rem;
+            color: var(--rose-light);
+            opacity: 0.95;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.25);
+        }
+
+        /* Synced Karaoke Love Message Panel */
+        #synced-love-note {
+            width: 90%;
+            max-width: 600px;
+            margin: -40px auto 70px auto;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(30, 8, 18, 0.45);
+            border: 1px solid rgba(244, 227, 193, 0.08);
+            border-radius: 16px;
+            padding: 15px 25px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        #synced-love-note p {
+            font-family: 'Caveat', cursive;
+            font-size: 1.9rem;
+            color: var(--rose-light);
+            line-height: 1.3;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* ==========================================
+        /* TIMELINE SCRAPBOOK SECTION
+        /* ========================================== */
+        .timeline-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 16px;
+            background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='40' viewBox='0 0 16 40'><path d='M8 0 Q12 10 8 20 Q4 30 8 40' fill='none' stroke='%23ff9ebb' stroke-width='1.8' stroke-linecap='round'/></svg>") repeat-y center;
+            opacity: 0.65;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 100%;
+            margin-bottom: 130px;
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .timeline-item:nth-child(even) {
+            justify-content: flex-end;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 50px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--gold);
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 0 12px var(--accent);
+        }
+
+        .polaroid-wrapper {
+            width: 45%;
+            max-width: 380px;
+            padding: 0 20px;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            perspective: 1000px;
+        }
+
+        .polaroid-wrapper.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .polaroid-card {
+            cursor: pointer;
+            position: relative;
+            overflow: visible;
+            perspective: 1500px;
+            transform-style: preserve-3d;
+            width: 100%;
+            aspect-ratio: 4 / 5.25; 
+            transition: box-shadow 0.4s ease;
+        }
+
+        .polaroid-card:hover {
+            box-shadow: 0 25px 50px rgba(0,0,0,0.45);
+        }
+
+        .polaroid-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+        }
+
+        /* 3D Flip Action */
+        .polaroid-card.flipped .polaroid-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .polaroid-front, .polaroid-back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            border-radius: 6px;
+            padding: 18px 18px 24px 18px;
+            display: flex;
+            flex-direction: column;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: var(--shadow);
+        }
+
+        .polaroid-front {
+            z-index: 2;
+            transform: rotateY(0deg);
+        }
+
+        .polaroid-back {
+            transform: rotateY(180deg);
+            z-index: 1;
+            background: linear-gradient(135deg, #fffdf8 0%, #fefcf3 100%);
+            color: #3d2d27;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e8dec9;
+        }
+
+        .polaroid-back-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+            border: 1px dashed #e4d8bc;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .back-eyebrow {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #b02b43;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .back-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.45rem;
+            color: #222;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.25;
+        }
+
+        .back-date {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.58rem;
+            color: #888;
+            letter-spacing: 2px;
+            margin-top: -6px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .back-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            line-height: 1.65;
+            color: #4a3e3b;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        .back-heart {
+            font-size: 1.3rem;
+            color: #b02b43;
+            margin-top: 12px;
+            animation: pulse-mini 2s infinite alternate ease-in-out;
+        }
+
+        @keyframes pulse-mini {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.22); }
+        }
+
+        .flip-hint {
+            position: absolute;
+            bottom: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.52rem;
+            color: rgba(0,0,0,0.25);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .polaroid-card:hover .flip-hint {
+            color: var(--accent);
+        }
+
+        .polaroid-tape {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-4deg);
+            width: 110px;
+            height: 30px;
+            background: rgba(244, 227, 193, 0.45);
+            backdrop-filter: blur(3px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            z-index: 10;
+            clip-path: polygon(0% 15%, 8% 0%, 93% 5%, 100% 25%, 97% 85%, 88% 100%, 12% 95%, 0% 75%);
+        }
+
+        .timeline-item:nth-child(even) .polaroid-tape {
+            transform: translateX(-50%) rotate(3deg);
+            background: rgba(255, 203, 213, 0.45);
+        }
+
+        .sticker {
+            position: absolute;
+            z-index: 15;
+            pointer-events: none;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.15));
+            transform-style: preserve-3d;
+        }
+
+        .polaroid-img-container {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            position: relative;
+            background: #e5e5e5;
+            border-radius: 3px;
+        }
+
+        .polaroid-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .polaroid-caption {
+            font-family: 'Caveat', cursive;
+            font-size: 2rem;
+            color: var(--text-dark);
+            text-align: center;
+            margin-top: 15px;
+            line-height: 1.15;
+            word-wrap: break-word;
+        }
+
+        .polaroid-date {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #8f817c;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+
+
+        /* ==========================================
+        /* WISH WELL SECTION
+        /* ========================================== */
+        .wish-well-section {
+            width: 100%;
+            max-width: 600px;
+            margin: 80px auto 40px auto;
+            text-align: center;
+            background: rgba(45, 10, 25, 0.35);
+            border: 1px solid rgba(244, 227, 193, 0.12);
+            padding: 45px 30px;
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow);
+            z-index: 10;
+        }
+
+        .well-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .well-subtitle {
+            font-size: 0.85rem;
+            color: var(--rose-light);
+            letter-spacing: 1px;
+            margin-bottom: 35px;
+            line-height: 1.5;
+        }
+
+        /* Interactive Wishing Well Graphics */
+        .well-wrapper {
+            position: relative;
+            width: 130px;
+            height: 165px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .well-graphics {
+            width: 100%;
+            height: 100%;
+            border: 4px solid rgba(244, 227, 193, 0.6);
+            border-radius: 30px 30px 25px 25px;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(255, 225, 120, 0.28) 0%, rgba(255,255,255,0.01) 75%);
+            box-shadow: 0 0 30px rgba(244, 227, 193, 0.25), inset 0 0 25px rgba(255, 255, 255, 0.12);
+            transition: all 0.3s ease;
+        }
+
+        .well-graphics::before {
+            /* Well roof / lid */
+            content: "";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 14px;
+            background: linear-gradient(to right, #aa8a2e, #d4af37, #aa8a2e);
+            border-radius: 6px;
+        }
+
+        .well-graphics::after {
+            /* Bucket crank rod */
+            content: "";
+            position: absolute;
+            top: 25px;
+            left: 5px;
+            right: 5px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        .well-wrapper:hover .well-graphics {
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 0 40px rgba(244, 227, 193, 0.45), inset 0 0 30px rgba(255, 255, 255, 0.18);
+            border-color: rgba(244, 227, 193, 0.95);
+        }
+
+        .well-fireflies {
+            position: absolute;
+            top: 40%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 1) 0%, rgba(255,140,0,0.56) 40%, rgba(255,0,0,0) 70%);
+            border-radius: 50%;
+            animation: breathe-glow 2s infinite ease-in-out alternate;
+            pointer-events: none;
+        }
+
+        .well-input-container {
+            margin-top: 35px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .well-input {
+            flex: 1;
+            max-width: 280px;
+            background: rgba(10, 2, 6, 0.5);
+            border: 1px solid rgba(244, 227, 193, 0.3);
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            font-size: 0.85rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .well-input:focus {
+            border-color: var(--accent);
+            background: rgba(10, 2, 6, 0.8);
+            box-shadow: 0 0 10px rgba(230, 57, 86, 0.3);
+        }
+
+        .well-submit-btn {
+            background: var(--accent);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .well-submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(230, 57, 86, 0.5);
+        }
+
+        /* ==========================================
+        /* BIRTHDAY CAKE & CELEBRATION
+        /* ========================================== */
+        .celebration-section {
+            width: 100%;
+            max-width: 650px;
+            margin: 130px auto 40px auto;
+            text-align: center;
+            position: relative;
+            z-index: 950;
+        }
+
+        .section-divider {
+            width: 80px;
+            height: 2px;
+            background: var(--gold);
+            margin: 0 auto 50px auto;
+            position: relative;
+        }
+
+        .section-divider::after {
+            content: "❤";
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: #080104;
+            padding: 0 10px;
+            color: var(--accent);
+        }
+
+        .celebration-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+        }
+
+        .celebration-instructions {
+            font-size: 0.95rem;
+            color: var(--rose-light);
+            margin-bottom: 60px;
+            letter-spacing: 1px;
+            line-height: 1.6;
+        }
+
+        /* Interactive CSS Cake */
+        .cake-container {
+            width: 300px;
+            height: 260px;
+            margin: 0 auto 50px auto;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cake-board {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 290px;
+            height: 18px;
+            background: linear-gradient(to bottom, #d4af37, #aa8a2e);
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.55);
+            z-index: 1;
+        }
+
+        .cake-tier {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 220px;
+            height: 80px;
+            background: #50311b; 
+            border-radius: 20px / 15px;
+            z-index: 2;
+            box-shadow: inset 0 5px 15px rgba(255,255,255,0.06), 0 6px 12px rgba(0,0,0,0.35);
+        }
+
+        .cake-tier-bottom {
+            bottom: 10px;
+            width: 235px;
+            height: 90px;
+            background: #3f2615;
+            border-radius: 24px / 15px;
+        }
+
+        .cake-tier-top {
+            bottom: 80px;
+            width: 175px;
+            height: 80px;
+            background: #50311b;
+            border-radius: 20px / 12px;
+            z-index: 3;
+        }
+
+        /* Frosting */
+        .frosting-drip {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            width: 100%;
+            height: 25px;
+            background: #e95d78; 
+            border-radius: 12px 12px 0 0;
+        }
+
+        .frosting-drip-top {
+            background: #fff9fa; 
+            border-radius: 10px 10px 0 0;
+        }
+
+        .drip-nodes {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            position: absolute;
+            top: 23px;
+        }
+
+        .drip-node {
+            width: 16px;
+            height: 18px;
+            background: #e95d78;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .cake-tier-top .drip-node {
+            background: #fff9fa;
+            width: 12px;
+            height: 14px;
+        }
+
+        .candles-group {
+            position: absolute;
+            bottom: 145px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 90px;
+            z-index: 10;
+        }
+
+        .candle {
+            position: absolute;
+            width: 6px;
+            height: 35px;
+            bottom: 0;
+            border-radius: 3px;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--rose-light),
+                var(--rose-light) 4px,
+                var(--accent) 4px,
+                var(--accent) 8px
+            );
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .candle:hover {
+            transform: scaleY(1.1);
+        }
+
+        .candle-flame {
+            position: absolute;
+            top: -15px;
+            left: -4px;
+            width: 14px;
+            height: 18px;
+            background: radial-gradient(circle at bottom, #ff9900 0%, #ffcc00 60%, #ffffcc 100%);
+            border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+            box-shadow: 0 0 12px rgba(255, 153, 0, 0.85), 0 0 22px rgba(255, 204, 0, 0.65);
+            animation: flicker 1.4s infinite alternate ease-in-out;
+            transform-origin: bottom center;
+            opacity: 1;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-1.5deg); }
+            100% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        .candle.blown .candle-flame {
+            opacity: 0;
+            transform: scale(0);
+            pointer-events: none;
+        }
+
+        .candles-count-overlay {
+            font-size: 0.95rem;
+            color: var(--rose-light);
+            margin-top: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .blow-all-btn {
+            margin-top: 25px;
+            background: var(--glass);
+            border: 1px solid rgba(255,203,213,0.35);
+            color: var(--rose-light);
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .blow-all-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 0 18px rgba(230, 57, 86, 0.45);
+        }
+
+        /* ==========================================
+        /* CONGRATS WISH CARD
+        /* ========================================== */
+        #wish-card {
+            width: 100%;
+            max-width: 620px;
+            background: linear-gradient(135deg, #fffcf5 0%, #fdf5e2 100%);
+            border: 2px solid #e5d1b1;
+            box-shadow: 0 40px 90px rgba(0,0,0,0.8), 0 0 50px rgba(255, 203, 213, 0.25);
+            border-radius: 12px;
+            padding: 60px 50px;
+            margin: 60px auto 0 auto;
+            position: relative;
+            display: none;
+            opacity: 0;
+            transform: translateY(60px);
+            transition: all 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.15);
+        }
+
+        #wish-card::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 1px dashed #d5b583;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        #wish-card.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .wish-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #b02b43;
+            margin-bottom: 25px;
+            line-height: 1.25;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .wish-letter {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            line-height: 2.2;
+            color: #382c28;
+            font-weight: 400;
+            text-align: left;
+            margin-bottom: 35px;
+            border-left: 3px solid #b02b43;
+            padding-left: 25px;
+        }
+
+        .wish-signature {
+            font-family: 'Caveat', cursive;
+            font-size: 3.5rem;
+            color: #b02b43;
+            text-align: right;
+            margin-top: 25px;
+        }
+
+        /* ==========================================
+        /* MOBILE RESPONSIVENESS
+        /* ========================================== */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2.6rem;
+            }
+
+            .header-subtitle {
+                font-size: 1.9rem;
+            }
+
+            .timeline-line {
+                left: 30px;
+            }
+
+            .timeline-dot {
+                left: 30px;
+            }
+
+            .timeline-item {
+                justify-content: flex-end;
+                padding-left: 45px;
+                margin-bottom: 70px;
+            }
+
+            .timeline-item:nth-child(even) {
+                justify-content: flex-end;
+            }
+
+            .polaroid-wrapper {
+                width: 100%;
+                max-width: 100%;
+                padding: 0 10px 0 15px;
+            }
+
+            .polaroid-card {
+                padding: 14px 14px 20px 14px;
+            }
+
+            .polaroid-caption {
+                font-size: 1.6rem;
+                margin-top: 15px;
+            }
+
+            .lightbox-content {
+                flex-direction: column;
+                max-height: 95vh;
+            }
+
+            .lightbox-text-pane {
+                padding: 30px 20px;
+            }
+
+            .lightbox-title {
+                font-size: 1.7rem;
+            }
+
+            .lightbox-desc {
+                font-size: 0.85rem;
+                line-height: 1.65;
+            }
+
+            .envelope-header {
+                font-size: 1.9rem;
+            }
+
+            .wish-heading {
+                font-size: 1.85rem;
+            }
+
+            .wish-letter {
+                font-size: 0.98rem;
+                line-height: 2.0;
+                padding-left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="debug-banner" style="position:fixed; top:0; left:0; width:100%; background:rgba(255,0,0,0.95); color:white; z-index:99999; font-size:12px; display:none; padding:10px; font-family:monospace; white-space:pre-wrap; border-bottom:2px solid gold;"></div>
+    <script>
+        window.onerror = function(msg, url, line, col, error) {
+            var banner = document.getElementById('debug-banner');
+            banner.style.display = 'block';
+            banner.innerText = "Error: " + msg + "\nAt: " + url + ":" + line + ":" + col + "\nStack: " + (error ? error.stack : 'N/A');
+            return false;
+        };
+    </script>
+
+    <!-- Fullscreen canvas for petals, ripples, shooting stars -->
+    <canvas id="hearts-canvas"></canvas>
+
+    <!-- Theatre dimmer layer -->
+    <div id="theatre-dimmer"></div>
+
+    <!-- Floating Audio Control Widget -->
+    <div id="audio-panel" class="muted">
+        <button id="audio-toggle" title="Toggle Music">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+        </button>
+        <!-- Mini Real-time Equalizer -->
+        <div class="visualizer" id="equalizer">
+            <div class="vis-bar"></div>
+            <div class="vis-bar"></div>
+            <div class="vis-bar"></div>
+            <div class="vis-bar"></div>
+        </div>
+    </div>
+
+    <!-- Floating Storm controls -->
+    <div class="floating-controls" id="floating-controls">
+        <button class="ctrl-btn" id="storm-toggle-btn">
+            <span style="font-size:1.1rem; color:var(--accent);">❤</span> Trigger Heart Storm
+        </button>
+    </div>
+
+    <!-- Introductory Slide Cover: Sliding Golden Key Heart Lock -->
+    <div id="intro-overlay">
+        <div class="envelope-container">
+            <div class="envelope-card">
+                <span class="envelope-sub">Birthday Surprise</span>
+                <h1 class="envelope-header">For My Beautiful Girlfriend, Kv</h1>
+                
+                <!-- Lock & Key drag interface -->
+                <div class="puzzle-box" id="puzzle-box">
+                    <div class="key-draggable" id="key-drag" draggable="false">
+                        <!-- Golden key icon SVG -->
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 18c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5h3v2h2v-2h2v2h3v3h-10c0 2.76-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                        </svg>
+                    </div>
+                    <div class="heart-lock" id="heart-lock">
+                        <!-- Heart shaped padlock SVG -->
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z M12 7 a2 2 0 0 0 -2 2 v3 a2 2 0 0 0 4 0 v-3 a2 2 0 0 0 -2 -2z"/>
+                        </svg>
+                    </div>
+                </div>
+                <p class="puzzle-instruction">Drag the Golden Key to the Heart Padlock to unlock your gift</p>
+                <button class="envelope-btn" id="open-seal-btn" style="margin-top:20px; display:none;">Open Love Letter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <header class="romantic-header">
+            <h1 class="header-title">Beautiful Journey</h1>
+            <p class="header-subtitle">Happy 24th Birthday, Kv</p>
+        </header>
+
+        <!-- Synced Love note karaoke card -->
+        <div id="synced-love-note">
+            <p id="synced-text">To my girlfriend, Kv... ❤</p>
+        </div>
+
+        <!-- Timeline -->
+        <div class="timeline-container">
+            <div class="timeline-line"></div>
+            
+            <div id="timeline-items">
+                <!-- Polaroid items generated dynamically -->
+            </div>
+        </div>
+
+        <!-- Wish Well Section (Replaces Wish Jar) -->
+        <section class="wish-well-section">
+            <h2 class="well-title">Wishing Well</h2>
+            <p class="well-subtitle">Cast a custom wish into the well to float up into the night sky as a paper lantern...</p>
+            <div class="well-wrapper" id="wish-jar-btn">
+                <div class="well-graphics">
+                    <div class="well-fireflies"></div>
+                </div>
+                <div class="jar-prompt">Wishing Well</div>
+            </div>
+            
+            <div class="well-input-container">
+                <input class="well-input" id="wish-custom-input" type="text" placeholder="Type a custom wish here..." maxlength="24">
+                <button class="well-submit-btn" id="wish-submit-btn">Cast Wish</button>
+            </div>
+        </section>
+
+        <!-- Birthday Celebration Section -->
+        <section class="celebration-section">
+            <div class="section-divider"></div>
+            <h2 class="celebration-title">Blow Out the Candles</h2>
+            <p class="celebration-instructions">
+                Make a wish, my love. Kv is turning 24 today! <br>
+                Tap on each candle to blow it out, or blow them all out together.
+            </p>
+
+            <div class="cake-container" id="cake-body">
+                <div class="cake-board"></div>
+                <div class="cake-tier cake-tier-bottom">
+                    <div class="frosting-drip">
+                        <div class="drip-nodes">
+                            <div class="drip-node"></div><div class="drip-node"></div><div class="drip-node"></div>
+                            <div class="drip-node"></div><div class="drip-node"></div><div class="drip-node"></div>
+                            <div class="drip-node"></div><div class="drip-node"></div><div class="drip-node"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cake-tier cake-tier-top">
+                    <div class="frosting-drip frosting-drip-top">
+                        <div class="drip-nodes">
+                            <div class="drip-node"></div><div class="drip-node"></div><div class="drip-node"></div>
+                            <div class="drip-node"></div><div class="drip-node"></div><div class="drip-node"></div>
+                            <div class="drip-node"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group of 24 candles spawned dynamically -->
+                <div class="candles-group" id="candles-holder"></div>
+            </div>
+
+            <div class="candles-count-overlay" id="candles-status-text">24 Candles glowing</div>
+            <button class="blow-all-btn" id="blow-all-btn">Blow Out All Candles</button>
+
+            <!-- Letter / Wish card released at end -->
+            <div id="wish-card">
+                <h2 class="wish-heading">Happy 24th Birthday, Kv!</h2>
+                <div class="wish-letter">
+                    To my amazing girlfriend, happy 24th birthday! Today is a celebration of you—the beautiful, kind, and brilliant person you are. Watching you grow, achieve your dreams, and bring happiness to everyone around you is my absolute joy. <br><br>
+                    May this 24th year bring you endless laughter, peace, success, and all the sweet moments your heart desires. You deserve the happiest and most wonderful year ahead. <br><br>
+                    Here's to celebrating your achievements, your milestones, and the beautiful journey of your life. I am so lucky to be by your side. Happy Birthday, my love!
+                </div>
+                <div class="wish-signature">With all my love, always ❤</div>
+            </div>
+        </section>
+    </div>
+
+
+
+    <script>
+        // ==========================================
+        // 1. CURATED MEMORIES DATA
+        // ==========================================
+        const memories = [
+            { 
+                image: '4f3d30c7-095d-4a65-85a5-94a37f8cb705~1.jpg', 
+                date: '3 Years Ago',
+                eyebrow: "Celebrating You", 
+                title: "A Beautiful Soul", 
+                text: "Celebrating you three years ago, seeing your beautiful birthday smile. Each year, your kindness, warmth, and laughter make the world a much brighter and happier place." 
+            },
+            { 
+                image: '12848.jpg', 
+                date: 'Your Sunshine',
+                eyebrow: "Radiant Joy", 
+                title: "Your Smile", 
+                text: "Your laughter is infectious, bringing sunshine to everyone around you. Celebrating the wonderful person you are, full of grace, humor, and endless love." 
+            },
+            { 
+                image: 'PXL_20250709_160633342~6.jpg', 
+                date: 'Last Year',
+                eyebrow: "Sweet 23", 
+                title: "Happy Memories", 
+                text: "Looking back at your 23rd birthday! A year of growth, beauty, and unforgettable laughs. Your happiness is the most precious gift I could ever wish for." 
+            },
+            { 
+                image: '1765533302091.png', 
+                date: 'Graduation',
+                eyebrow: "Brilliance & Grace", 
+                title: "Your Milestone", 
+                text: "A proud milestone celebrating your dedication, brilliance, and success! You achieve everything you set your mind to, and I can't wait to see you conquer more dreams." 
+            },
+            { 
+                image: 'PXL_20250823_073222622~2.jpg', 
+                date: 'Simple Joys',
+                eyebrow: "Wishing You Peace", 
+                title: "Life's Simple Joys", 
+                text: "Wishing you a life filled with simple joys, beautiful sunsets, and all the peaceful moments you deserve. May your days always be as lovely as you are." 
+            },
+            { 
+                image: 'PXL_20250823_073251789~2.jpg', 
+                date: 'Your Sparkle',
+                eyebrow: "Inspirational You", 
+                title: "Your Sparkle", 
+                text: "Never lose that sparkle in your eyes. You have this magical ability to make everyone around you feel special, loved, and inspired." 
+            },
+            { 
+                image: 'PXL_20251018_114750195.jpg', 
+                date: 'Looking Ahead',
+                eyebrow: "Bright Future", 
+                title: "Looking Ahead", 
+                text: "To the future and all the incredible new chapters, wisdom, and achievements this coming year will bring to your life. May all your dreams come true!" 
+            },
+            { 
+                image: 'PXL_20260509_064618797~2 (1).jpg', 
+                date: 'Today',
+                eyebrow: "Kv's Special Day", 
+                title: "Happy 24th Birthday!", 
+                text: "Today is all about you! Happy 24th Birthday to the most amazing, beautiful, and wonderful girl in the universe. May this day bring you endless happiness, love, and sweet surprises." 
+            }
+        ];
+
+        // Synced love karaoke lines mapped to music clock/bars
+        const karaokeLines = [
+            "Today we celebrate the beautiful soul you are... 🎂",
+            "Happy 24th Birthday, my lovely Kv! 🎉",
+            "Celebrating your laughter and your sweet smile...",
+            "Proud of all your milestones and achievements...",
+            "Wishing you a year ahead filled with joy and dreams...",
+            "You deserve the happiest and brightest day...",
+            "Happy Birthday to my beautiful girlfriend...",
+            "May all your wishes come true today and forever! ✨🥂"
+        ];
+
+        // ==========================================
+        // 2. TIMELINE GENERATION & 3D PARALLAX TILT
+        // ==========================================
+        const timelineItemsContainer = document.getElementById('timeline-items');
+
+        const stickerSvgs = [
+            `<svg class="sticker" style="width:40px; height:40px; top:-5px; right:-10px; transform: rotate(15deg);" viewBox="0 0 24 24"><path fill="#e63956" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>`,
+            `<svg class="sticker" style="width:35px; height:35px; bottom:-10px; right:10px; transform: rotate(-25deg);" viewBox="0 0 24 24"><path fill="#ffd700" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27z"/></svg>`,
+            `<svg class="sticker" style="width:42px; height:42px; bottom:25px; left:-15px; transform: rotate(-10deg);" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#e63956" stroke-width="4" stroke-dasharray="6,4"/><path fill="#e63956" d="M50 35c-2-4-7-4-9 0-3 3-1 7 9 15 10-8 12-12 9-15-2-4-7-4-9 0z"/><text x="50" y="70" font-family="'Playfair Display', serif" font-size="14" fill="#e63956" font-weight="bold" text-anchor="middle">LOVE</text></svg>`,
+            `<svg class="sticker" style="width:38px; height:38px; top:20px; left:-18px; transform: rotate(-15deg);" viewBox="0 0 24 24"><path fill="#ffcbd5" stroke="#e63956" stroke-width="1.5" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/><circle cx="9" cy="8" r="1.5" fill="#3d2f2b"/><circle cx="15" cy="8" r="1.5" fill="#3d2f2b"/><path d="M9 12 Q12 15 15 12" fill="none" stroke="#3d2f2b" stroke-width="1.5" stroke-linecap="round"/></svg>`
+        ];
+
+        memories.forEach((mem, index) => {
+            const item = document.createElement('div');
+            item.className = 'timeline-item';
+            
+            const randomTilt = (Math.random() * 3.6 - 1.8).toFixed(1); 
+            
+            const stickerCount = Math.floor(Math.random() * 2) + 1;
+            let stickersHtml = '';
+            let stickerIndexes = [0, 1, 2, 3].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < stickerCount; i++) {
+                stickersHtml += stickerSvgs[stickerIndexes[i]];
+            }
+
+            item.innerHTML = `
+                <div class="timeline-dot"></div>
+                <div class="polaroid-wrapper" id="mem-wrapper-${index}">
+                    <div class="polaroid-card" data-tilt="${randomTilt}" style="transform: rotate(${randomTilt}deg)">
+                        <div class="polaroid-card-inner">
+                            <!-- FRONT OF CARD -->
+                            <div class="polaroid-front">
+                                <div class="polaroid-tape"></div>
+                                ${stickersHtml}
+                                <div class="polaroid-img-container">
+                                    <img src="${mem.image}" alt="${mem.title}">
+                                </div>
+                                <div class="polaroid-caption">${mem.title}</div>
+                                <div class="polaroid-date">${mem.date}</div>
+                                <div class="flip-hint">Click to flip ❤</div>
+                            </div>
+                            <!-- BACK OF CARD -->
+                            <div class="polaroid-back">
+                                <div class="polaroid-tape"></div>
+                                <div class="polaroid-back-content">
+                                    <div class="back-eyebrow">${mem.eyebrow}</div>
+                                    <div class="back-title">${mem.title}</div>
+                                    <div class="back-date">${mem.date}</div>
+                                    <p class="back-text">${mem.text}</p>
+                                    <div class="back-heart">❤</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            timelineItemsContainer.appendChild(item);
+        });
+
+        // 3D Card Hover & Direct Flip Listeners
+        document.querySelectorAll('.polaroid-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                if (card.classList.contains('flipped')) return;
+                
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                const tiltX = -(y / (rect.height / 2)) * 14; 
+                const tiltY = (x / (rect.width / 2)) * 14;
+                card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.06)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                if (card.classList.contains('flipped')) return;
+                const initialTilt = card.dataset.tilt || 0;
+                card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(${initialTilt}deg) scale(1)`;
+            });
+
+            card.addEventListener('click', () => {
+                // Reset hover styles on click to prevent transform conflicts
+                card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
+                card.classList.toggle('flipped');
+                triggerChimeSound();
+                
+                if (!card.classList.contains('flipped')) {
+                    setTimeout(() => {
+                        const initialTilt = card.dataset.tilt || 0;
+                        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) rotateZ(${initialTilt}deg) scale(1)`;
+                    }, 800);
+                }
+            });
+        });
+
+        // Intersection Observer scroll trigger
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const timelineObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    timelineObserver.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.polaroid-wrapper').forEach(card => {
+            timelineObserver.observe(card);
+        });
+
+
+
+        // ==========================================
+        // 4. MUSIC BOX SYNTH & REAL-TIME VISUALIZER
+        // ==========================================
+        class MusicBox {
+            constructor() {
+                this.ctx = null;
+                this.isPlaying = false;
+                this.tempo = 145; 
+                this.beatDuration = 60 / this.tempo;
+                
+                // Happy Birthday melody notes
+                this.melody = [
+                    [79, 0.5, 0], [79, 0.5, 0.5], [81, 1, 1], [79, 1, 2], [84, 1, 3], [83, 2, 4],
+                    [79, 0.5, 6], [79, 0.5, 6.5], [81, 1, 7], [79, 1, 8], [86, 1, 9], [84, 2, 10],
+                    [79, 0.5, 12], [79, 0.5, 12.5], [91, 1, 13], [88, 1, 14], [84, 1, 15], [83, 1, 16], [81, 1, 17],
+                    [89, 0.5, 18], [89, 0.5, 18.5], [88, 1, 19], [84, 1, 20], [86, 1, 21], [84, 2, 22]
+                ];
+                
+                this.chords = [
+                    [48, 52, 55, 64], 
+                    [43, 47, 50, 59], 
+                    [43, 47, 50, 59], 
+                    [48, 52, 55, 64], 
+                    [48, 52, 55, 64], 
+                    [41, 45, 48, 57], 
+                    [48, 52, 55, 64], 
+                    [43, 47, 50, 59]  
+                ];
+                
+                this.sequenceId = null;
+                this.nextNoteTime = 0;
+                this.mainGain = null;
+                this.delayNode = null;
+                this.delayGain = null;
+                this.analyser = null;
+            }
+            
+            midiToFreq(note) {
+                return 440 * Math.pow(2, (note - 69) / 12);
+            }
+            
+            start() {
+                try {
+                    if (this.isPlaying) return;
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    this.isPlaying = true;
+                    
+                    this.mainGain = this.ctx.createGain();
+                    this.mainGain.gain.setValueAtTime(0.24, this.ctx.currentTime);
+                    
+                    this.delayNode = this.ctx.createDelay(1.0);
+                    this.delayNode.delayTime.value = 0.38; 
+                    this.delayGain = this.ctx.createGain();
+                    this.delayGain.gain.value = 0.35; 
+                    
+                    this.delayNode.connect(this.delayGain);
+                    this.delayGain.connect(this.delayNode);
+                    
+                    this.analyser = this.ctx.createAnalyser();
+                    this.analyser.fftSize = 32;
+                    
+                    this.mainGain.connect(this.analyser);
+                    this.mainGain.connect(this.ctx.destination);
+                    this.mainGain.connect(this.delayNode);
+                    this.delayNode.connect(this.ctx.destination);
+                    
+                    this.nextNoteTime = this.ctx.currentTime;
+                    this.scheduler();
+                    animateVisualizer();
+                    animateKaraokeText();
+                } catch(e) {
+                    console.error("Audio Context initialization failed: ", e);
+                }
+            }
+            
+            scheduler() {
+                if (!this.isPlaying) return;
+                
+                while (this.nextNoteTime < this.ctx.currentTime + 0.1) {
+                    this.scheduleNotes();
+                    this.nextNoteTime += this.beatDuration / 2; 
+                }
+                this.sequenceId = setTimeout(() => this.scheduler(), 25);
+            }
+            
+            scheduleNotes() {
+                let loopTicks = 48;
+                let tick = Math.round((this.nextNoteTime * 2 / this.beatDuration)) % loopTicks;
+                let currentBeat = tick / 2;
+                
+                // Play melody
+                this.melody.forEach(item => {
+                    let noteBeat = item[2];
+                    if (Math.abs(currentBeat - noteBeat) < 0.01) {
+                        this.playSynthNote(this.midiToFreq(item[0]), this.nextNoteTime, item[1] * this.beatDuration, 0.45, 'sine');
+                    }
+                });
+                
+                // Waltz arpeggio chords
+                let bar = Math.floor(tick / 6) % this.chords.length;
+                let chord = this.chords[bar];
+                let subTick = tick % 6;
+                
+                if (subTick === 0) {
+                    this.playSynthNote(this.midiToFreq(chord[0]), this.nextNoteTime, this.beatDuration * 2.5, 0.12, 'triangle');
+                } else if (subTick === 2) {
+                    this.playSynthNote(this.midiToFreq(chord[1]), this.nextNoteTime, this.beatDuration * 1.5, 0.08, 'triangle');
+                } else if (subTick === 4) {
+                    this.playSynthNote(this.midiToFreq(chord[2]), this.nextNoteTime, this.beatDuration * 1.5, 0.08, 'triangle');
+                }
+            }
+            
+            playSynthNote(freq, time, dur, vol, type) {
+                if (!this.ctx || !this.isPlaying) return;
+                
+                let osc = this.ctx.createOscillator();
+                let gainNode = this.ctx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, time);
+                
+                gainNode.gain.setValueAtTime(0, time);
+                gainNode.gain.linearRampToValueAtTime(vol, time + 0.012);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, time + dur);
+                
+                let filter = this.ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(type === 'sine' ? freq * 1.6 : freq * 2, time);
+                
+                osc.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(this.mainGain);
+                
+                osc.start(time);
+                osc.stop(time + dur + 0.1);
+            }
+            
+            stop() {
+                this.isPlaying = false;
+                if (this.sequenceId) clearTimeout(this.sequenceId);
+                if (this.ctx) {
+                    try {
+                        this.ctx.close();
+                    } catch(e){}
+                    this.ctx = null;
+                }
+            }
+        }
+
+        const music = new MusicBox();
+        const audioPanel = document.getElementById('audio-panel');
+        const audioToggle = document.getElementById('audio-toggle');
+        const visBars = document.querySelectorAll('.vis-bar');
+
+        function toggleMusic() {
+            if (music.isPlaying) {
+                music.stop();
+                audioPanel.classList.add('muted');
+                audioPanel.classList.remove('music-playing');
+                visBars.forEach(bar => bar.style.height = '3px');
+            } else {
+                music.start();
+                audioPanel.classList.remove('muted');
+                audioPanel.classList.add('music-playing');
+            }
+        }
+
+        audioToggle.addEventListener('click', toggleMusic);
+
+        // Real-time Visualizer bars sync
+        function animateVisualizer() {
+            if (!music.isPlaying || !music.analyser) return;
+            
+            let dataArray = new Uint8Array(music.analyser.frequencyBinCount);
+            music.analyser.getByteFrequencyData(dataArray);
+            
+            visBars.forEach((bar, idx) => {
+                let val = dataArray[idx * 2 + 1] || 0;
+                let height = Math.max(3, Math.min(20, Math.floor(val / 8)));
+                bar.style.height = `${height}px`;
+            });
+            
+            requestAnimationFrame(animateVisualizer);
+        }
+
+        // Cycle synced romantic notes in tempo
+        const syncedTextEl = document.getElementById('synced-text');
+        let karaokeIndex = 0;
+        function animateKaraokeText() {
+            if (!music.isPlaying) return;
+            
+            gsap.to(syncedTextEl, {
+                opacity: 0,
+                y: -10,
+                duration: 0.4,
+                onComplete: () => {
+                    syncedTextEl.innerText = karaokeLines[karaokeIndex];
+                    gsap.to(syncedTextEl, { opacity: 1, y: 0, duration: 0.5 });
+                    
+                    karaokeIndex = (karaokeIndex + 1) % karaokeLines.length;
+                    
+                    // switch phrase every 5.1 seconds (5100ms matches Bar length)
+                    setTimeout(animateKaraokeText, 5100);
+                }
+            });
+        }
+
+        // Blow sound (white noise)
+        function triggerBlowSound() {
+            try {
+                if (!music.ctx) return;
+                let ctx = music.ctx;
+                let now = ctx.currentTime;
+                
+                let bufferSize = ctx.sampleRate * 0.35; 
+                let buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                let data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1; 
+                }
+                
+                let noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+                
+                let filter = ctx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.setValueAtTime(850, now);
+                filter.frequency.exponentialRampToValueAtTime(110, now + 0.35);
+                filter.Q.setValueAtTime(3.5, now);
+                
+                let gain = ctx.createGain();
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.2, now + 0.04);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+                
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(ctx.destination);
+                
+                noise.start(now);
+            } catch(e){}
+        }
+
+        // Sparkle sound
+        function triggerChimeSound() {
+            try {
+                if (!music.ctx) return;
+                let ctx = music.ctx;
+                let now = ctx.currentTime;
+                let freqs = [1046.50, 1318.51, 1567.98, 2093.00]; 
+                freqs.forEach((freq, idx) => {
+                    let osc = ctx.createOscillator();
+                    let gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0, now + idx * 0.04);
+                    gain.gain.linearRampToValueAtTime(0.08, now + idx * 0.04 + 0.01);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + idx * 0.04 + 0.25);
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.start(now + idx * 0.04);
+                    osc.stop(now + idx * 0.04 + 0.3);
+                });
+            } catch(e){}
+        }
+
+        // ==========================================
+        // 5. CAKE & CANDLE BLOW INTERACTIVE GAME
+        // ==========================================
+        const candlesHolder = document.getElementById('candles-holder');
+        const candlesStatusText = document.getElementById('candles-status-text');
+        const blowAllBtn = document.getElementById('blow-all-btn');
+        const wishCard = document.getElementById('wish-card');
+        const theatreDimmer = document.getElementById('theatre-dimmer');
+
+        let totalCandles = 24;
+        let activeCandles = [];
+
+        function generateCandles() {
+            for (let i = 0; i < totalCandles; i++) {
+                const candle = document.createElement('div');
+                candle.className = 'candle';
+                
+                const angle = (i / (totalCandles - 1)) * Math.PI;
+                const rx = 65; 
+                const ry = 15; 
+                const cx = 80; 
+                const cy = 40; 
+                
+                const posX = cx + Math.cos(angle) * rx - 3;
+                const posY = cy + Math.sin(angle) * ry - 5;
+                
+                candle.style.left = `${posX}px`;
+                candle.style.bottom = `${posY}px`;
+                
+                const heightVar = Math.floor(Math.random() * 8) + 30;
+                candle.style.height = `${heightVar}px`;
+
+                const flame = document.createElement('div');
+                flame.className = 'candle-flame';
+                flame.style.animationDelay = `${(Math.random() * 1.5).toFixed(2)}s`;
+                
+                candle.appendChild(flame);
+                candlesHolder.appendChild(candle);
+                activeCandles.push(candle);
+
+                candle.addEventListener('click', () => {
+                    if (!candle.classList.contains('blown')) {
+                        blowCandle(candle);
+                    }
+                });
+            }
+        }
+
+        generateCandles();
+
+        function blowCandle(candle) {
+            candle.classList.add('blown');
+            triggerBlowSound();
+            spawnSmoke(candle);
+            
+            const remaining = activeCandles.filter(c => !c.classList.contains('blown')).length;
+            
+            if (remaining === 0) {
+                candlesStatusText.innerText = "All candles blown out! 💖";
+                triggerCelebration();
+            } else {
+                candlesStatusText.innerText = `${remaining} Candles glowing`;
+            }
+        }
+
+        blowAllBtn.addEventListener('click', () => {
+            let index = 0;
+            const timer = setInterval(() => {
+                const unblown = activeCandles.filter(c => !c.classList.contains('blown'));
+                if (unblown.length === 0) {
+                    clearInterval(timer);
+                } else {
+                    blowCandle(unblown[0]);
+                }
+            }, 60);
+        });
+
+        function spawnSmoke(candle) {
+            const rect = candle.getBoundingClientRect();
+            const canvasRect = canvas.getBoundingClientRect();
+            const sx = rect.left - canvasRect.left + rect.width / 2;
+            const sy = rect.top - canvasRect.top;
+            
+            for (let i = 0; i < 4; i++) {
+                particlesArray.push(new SmokeParticle(sx, sy));
+            }
+        }
+
+        let celebrationTriggered = false;
+        function triggerCelebration() {
+            if (celebrationTriggered) return;
+            celebrationTriggered = true;
+            
+            // Dim theater lights
+            theatreDimmer.style.opacity = '0.78';
+            
+            triggerChimeSound();
+            triggerShootingStars();
+            
+            // Confetti burst
+            const canvasRect = canvas.getBoundingClientRect();
+            for(let i=0; i<160; i++) {
+                confettiArray.push(new Confetti(canvasRect.width / 2, canvasRect.height - 320));
+            }
+
+            setTimeout(() => {
+                wishCard.classList.add('visible');
+                triggerChimeSound();
+                
+                // Continuous confetti
+                setInterval(() => {
+                    if (confettiArray.length < 180) {
+                        confettiArray.push(new Confetti(Math.random() * canvasRect.width, -10));
+                    }
+                }, 200);
+
+                gsap.to(window, {
+                    scrollTo: { y: document.body.scrollHeight, autoKill: false },
+                    duration: 1.8,
+                    ease: "power2.out"
+                });
+            }, 800);
+        }
+
+        function triggerShootingStars() {
+            for(let i=0; i<4; i++) {
+                setTimeout(() => {
+                    particlesArray.push(new ShootingStar());
+                }, i * 1500);
+            }
+        }
+
+        // ==========================================
+        // 6. ENVELOPE DRAG AND DROP KEY UNLOCK
+        // ==========================================
+        const introOverlay = document.getElementById('intro-overlay');
+        const mainContent = document.getElementById('main-content');
+        const keyDrag = document.getElementById('key-drag');
+        const heartLock = document.getElementById('heart-lock');
+        const puzzleBox = document.getElementById('puzzle-box');
+        const floatControls = document.getElementById('floating-controls');
+
+        let isDraggingKey = false;
+        let startX = 0, startY = 0;
+        let restingX = 0, restingY = 0; // relative offsets
+
+        // Retrieve bounds
+        function getDistance(el1, el2) {
+            const r1 = el1.getBoundingClientRect();
+            const r2 = el2.getBoundingClientRect();
+            const c1x = r1.left + r1.width / 2;
+            const c1y = r1.top + r1.height / 2;
+            const c2x = r2.left + r2.width / 2;
+            const c2y = r2.top + r2.height / 2;
+            const dx = c1x - c2x;
+            const dy = c1y - c2y;
+            return Math.sqrt(dx*dx + dy*dy);
+        }
+
+        // Unified Pointer Drag Events
+        keyDrag.addEventListener('pointerdown', (e) => {
+            isDraggingKey = true;
+            keyDrag.setPointerCapture(e.pointerId);
+            startX = e.clientX - restingX;
+            startY = e.clientY - restingY;
+            gsap.to(keyDrag, { scale: 1.15, duration: 0.2 });
+        });
+
+        keyDrag.addEventListener('pointermove', (e) => {
+            if (!isDraggingKey) return;
+            restingX = e.clientX - startX;
+            restingY = e.clientY - startY;
+            
+            // Constrain movement inside puzzlebox
+            const pBoxRect = puzzleBox.getBoundingClientRect();
+            const kRect = keyDrag.getBoundingClientRect();
+            
+            gsap.set(keyDrag, { x: restingX, y: restingY });
+            
+            // Check snap hover proximity
+            if (getDistance(keyDrag, heartLock) < 55) {
+                gsap.to(heartLock, { scale: 1.15, duration: 0.2 });
+            } else {
+                gsap.to(heartLock, { scale: 1, duration: 0.2 });
+            }
+        });
+
+        keyDrag.addEventListener('pointerup', (e) => {
+            if (!isDraggingKey) return;
+            isDraggingKey = false;
+            keyDrag.releasePointerCapture(e.pointerId);
+            
+            // Verify lock snap success
+            if (getDistance(keyDrag, heartLock) < 55) {
+                // Snap Lock Success!
+                keyDrag.classList.add('snapped');
+                heartLock.classList.add('unlocked');
+                
+                // Align key center on lock
+                const lockRect = heartLock.getBoundingClientRect();
+                const boxRect = puzzleBox.getBoundingClientRect();
+                const targetX = (lockRect.left - boxRect.left) + (lockRect.width/2 - keyDrag.offsetWidth/2);
+                const targetY = (lockRect.top - boxRect.top) + (lockRect.height/2 - keyDrag.offsetHeight/2) - 10;
+                
+                // CSS offset calculation
+                const finalX = targetX - 40; // initial left padding offset
+                const finalY = targetY - 50; // initial top padding offset
+
+                gsap.to(keyDrag, {
+                    x: finalX,
+                    y: finalY,
+                    scale: 1.0,
+                    duration: 0.3,
+                    onComplete: () => {
+                        // Play Unlock Sounds
+                        triggerChimeSound();
+                        setTimeout(() => {
+                            // Spawn lock burst particles in intro overlay canvas
+                            unlockSiteReveal();
+                        }, 500);
+                    }
+                });
+            } else {
+                // Fail - bounce back to resting starting point
+                gsap.to(keyDrag, { x: 0, y: 0, scale: 1, duration: 0.5, ease: "bounce.out" });
+                restingX = 0;
+                restingY = 0;
+            }
+        });
+
+        function unlockSiteReveal() {
+            // Unhide main and slide envelope out
+            introOverlay.style.opacity = '0';
+            introOverlay.style.visibility = 'hidden';
+            mainContent.style.display = 'flex';
+            
+            music.start();
+            audioPanel.classList.remove('muted');
+            audioPanel.classList.add('music-playing');
+            audioPanel.classList.add('visible');
+            floatControls.classList.add('visible');
+            
+            gsap.to(mainContent, { opacity: 1, duration: 1.2 });
+            gsap.from(".romantic-header", { y: -30, opacity: 0, duration: 1.2, delay: 0.2, ease: "power3.out" });
+            
+            canvasInit();
+        }
+
+        // ==========================================
+        // 7. WISHING WELL SYSTEM
+        // ==========================================
+        const wishWellBtn = document.getElementById('wish-jar-btn');
+        const wishSubmitBtn = document.getElementById('wish-submit-btn');
+        const wishInput = document.getElementById('wish-custom-input');
+        
+        const presetWishes = [
+            "Endless Smiles", "Grand Adventures", "Laughter & Joy", "Safe Journeys",
+            "Bright Dreams", "Forever Love", "Perfect Peace", "Beautiful Milestones"
+        ];
+
+        function castWishText(text) {
+            const rect = wishWellBtn.getBoundingClientRect();
+            const canvasRect = canvas.getBoundingClientRect();
+            const sx = rect.left - canvasRect.left + rect.width / 2;
+            const sy = rect.top - canvasRect.top + 35;
+            
+            // Spawn paper lantern
+            particlesArray.push(new LanternParticle(sx, sy, text));
+            
+            // Spawn shooting star in the sky
+            setTimeout(() => {
+                particlesArray.push(new ShootingStar());
+            }, 300);
+            
+            triggerChimeSound();
+        }
+
+        wishWellBtn.addEventListener('click', () => {
+            // Select random preset wish
+            const randomWish = presetWishes[Math.floor(Math.random() * presetWishes.length)];
+            castWishText(randomWish);
+        });
+
+        wishSubmitBtn.addEventListener('click', () => {
+            const customText = wishInput.value.trim();
+            if (customText.length > 0) {
+                castWishText(customText);
+                wishInput.value = ''; // clear input
+            } else {
+                // fall back to default preset wish
+                const randomWish = presetWishes[Math.floor(Math.random() * presetWishes.length)];
+                castWishText(randomWish);
+            }
+        });
+
+        wishInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                wishSubmitBtn.click();
+            }
+        });
+
+        // ==========================================
+        // 8. PARTICLE CANVAS PHYSICS SIMULATOR
+        // ==========================================
+        const canvas = document.getElementById('hearts-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        let confettiArray = [];
+        let ripplesArray = [];
+        let heartStormActive = false; // toggles tornado mode
+        
+        const stormBtn = document.getElementById('storm-toggle-btn');
+        
+        stormBtn.addEventListener('click', () => {
+            heartStormActive = !heartStormActive;
+            
+            // Instantly apply the storm state to all existing hearts/blossoms
+            particlesArray.forEach(p => {
+                if (p instanceof HeartParticle || p instanceof CherryBlossomParticle) {
+                    p.isStorm = heartStormActive;
+                    if (heartStormActive) {
+                        p.x = Math.random() * canvas.width;
+                        p.y = Math.random() * canvas.height;
+                        p.vx = Math.random() * 4 - 2;
+                        p.vy = Math.random() * 4 - 2;
+                    }
+                }
+            });
+
+            if (heartStormActive) {
+                stormBtn.classList.add('active');
+                stormBtn.innerHTML = '<span style="font-size:1.1rem; color:#fff;">🌸</span> Storming Swarm!';
+                triggerChimeSound();
+                // Spawn immediately a burst of 145 storm particles scattered across the screen
+                for(let i=0; i<145; i++) {
+                    const isBlossom = Math.random() < 0.45;
+                    if (isBlossom) {
+                        particlesArray.push(new CherryBlossomParticle(true));
+                    } else {
+                        particlesArray.push(new HeartParticle(undefined, undefined, false, true));
+                    }
+                }
+            } else {
+                stormBtn.classList.remove('active');
+                stormBtn.innerHTML = '<span style="font-size:1.1rem; color:var(--accent);">❤</span> Trigger Heart Storm';
+            }
+        });
+
+        function canvasInit() {
+            resizeCanvas();
+            animateParticles();
+            
+            // Spawn background floaters
+            setInterval(() => {
+                let limit = heartStormActive ? 385 : 80;
+                if (particlesArray.length < limit) {
+                    if (Math.random() < 0.45) {
+                        particlesArray.push(new HeartParticle(undefined, undefined, false, heartStormActive));
+                    } else {
+                        particlesArray.push(new CherryBlossomParticle(heartStormActive));
+                    }
+                }
+            }, 80);
+
+            // Shimmering stardust
+            for(let i=0; i<45; i++) {
+                particlesArray.push(new StardustParticle());
+            }
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        // Click ripple forces & spawn burst
+        let isPointerDown = false;
+        let pointerX = 0, pointerY = 0;
+        
+        window.addEventListener('mousedown', (e) => {
+            if (introOverlay.style.visibility === 'hidden') {
+                ripplesArray.push(new Ripple(e.clientX, e.clientY));
+                isPointerDown = true;
+                pointerX = e.clientX;
+                pointerY = e.clientY;
+                
+                // Spawn a quick burst of hearts on click
+                for(let i=0; i<12; i++) {
+                    particlesArray.push(new HeartParticle(e.clientX, e.clientY, true));
+                }
+            }
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (introOverlay.style.visibility === 'hidden') {
+                pointerX = e.clientX;
+                pointerY = e.clientY;
+                // Move trail
+                if (Math.random() < 0.35) {
+                    particlesArray.push(new HeartParticle(e.clientX, e.clientY, true));
+                }
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            isPointerDown = false;
+        });
+
+        // Touch handlers for mobile
+        window.addEventListener('touchstart', (e) => {
+            if (introOverlay.style.visibility === 'hidden' && e.touches.length > 0) {
+                const tx = e.touches[0].clientX;
+                const ty = e.touches[0].clientY;
+                ripplesArray.push(new Ripple(tx, ty));
+                isPointerDown = true;
+                pointerX = tx;
+                pointerY = ty;
+                
+                for(let i=0; i<10; i++) {
+                    particlesArray.push(new HeartParticle(tx, ty, true));
+                }
+            }
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (introOverlay.style.visibility === 'hidden' && e.touches.length > 0) {
+                const tx = e.touches[0].clientX;
+                const ty = e.touches[0].clientY;
+                pointerX = tx;
+                pointerY = ty;
+                if (Math.random() < 0.35) {
+                    particlesArray.push(new HeartParticle(tx, ty, true));
+                }
+            }
+        });
+
+        window.addEventListener('touchend', () => {
+            isPointerDown = false;
+        });
+
+        // Continuous heart fountain when pointer is held down
+        setInterval(() => {
+            if (isPointerDown && introOverlay.style.visibility === 'hidden') {
+                // Continuous fountain
+                for(let i=0; i<3; i++) {
+                    particlesArray.push(new HeartParticle(pointerX, pointerY, true, heartStormActive));
+                }
+            }
+        }, 50);
+        // Draw Heart on Canvas helper
+        function drawHeart(ctx, x, y, width, height, color, opacity) {
+            ctx.save();
+            ctx.globalAlpha = opacity;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            
+            ctx.moveTo(x, y + height / 4);
+            ctx.bezierCurveTo(x, y, x - width / 2, y, x - width / 2, y + height / 2);
+            ctx.bezierCurveTo(x - width / 2, y + height * 0.75, x, y + height * 0.95, x, y + height);
+            ctx.bezierCurveTo(x, y + height * 0.95, x + width / 2, y + height * 0.75, x + width / 2, y + height / 2);
+            ctx.bezierCurveTo(x + width / 2, y, x, y, x, y + height / 4);
+            
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // Draw Cherry Blossom Petal helper
+        function drawCherryBlossom(ctx, x, y, size, rotation, opacity, color) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation);
+            ctx.globalAlpha = opacity;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            
+            // Draw cleft-notch petal
+            ctx.moveTo(0, -size / 2);
+            ctx.bezierCurveTo(-size / 2, -size / 2, -size * 0.8, -size / 6, -size / 2, size / 2);
+            ctx.bezierCurveTo(-size / 4, size * 0.75, 0, size * 0.9, 0, size * 0.95);
+            ctx.bezierCurveTo(0, size * 0.9, size / 4, size * 0.75, size / 2, size / 2);
+            ctx.bezierCurveTo(size * 0.8, -size / 6, size / 2, -size / 2, 0, -size / 2);
+            
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // Ripple Physics wave class
+        class Ripple {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.radius = 0;
+                this.maxRadius = 170;
+                this.speed = 5.0;
+                this.force = 15;
+            }
+            update() {
+                this.radius += this.speed;
+            }
+            draw() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.strokeStyle = `rgba(255, 203, 213, ${1 - this.radius / this.maxRadius})`;
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // Particle Class: Rising Love Hearts
+        class HeartParticle {
+            constructor(x, y, isTrail = false, isStorm = false) {
+                this.x = x !== undefined ? x : Math.random() * canvas.width;
+                this.y = y !== undefined ? y : (isStorm ? Math.random() * canvas.height : canvas.height + 20);
+                
+                this.isStorm = isStorm;
+                this.isTrail = isTrail;
+                
+                // Storm mode makes them larger and shinier
+                this.size = Math.random() * (isStorm ? 18 : 12) + (isStorm ? 8 : 5);
+                this.width = this.size;
+                this.height = this.size;
+                
+                // Rising velocity
+                this.speedY = isTrail ? -(Math.random() * 2.5 + 1.2) : -(Math.random() * 1.4 + 0.4);
+                this.speedX = Math.random() * 1.0 - 0.5;
+                
+                // Swarm velocity
+                this.vx = Math.random() * 4 - 2;
+                this.vy = Math.random() * 4 - 2;
+                
+                const colors = ['#e63956', '#ffcbd5', '#e95d78', '#ff7b93', '#ffd700'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                this.opacity = isTrail ? 0.95 : Math.random() * 0.45 + 0.15;
+                this.decay = Math.random() * 0.006 + 0.003;
+                
+                this.angle = Math.random() * Math.PI * 2;
+                this.angleSpeed = Math.random() * 0.03 + 0.005;
+            }
+
+            update() {
+                if (this.isStorm) {
+                    // Swarm behavior like a team of honey bees following a flower (cursor/floating target)
+                    let targetX, targetY;
+                    if (isPointerDown) {
+                        targetX = pointerX;
+                        targetY = pointerY;
+                    } else {
+                        // Slowly glide target in a figure-8 flow path
+                        const time = Date.now() * 0.0012;
+                        targetX = canvas.width / 2 + Math.sin(time) * (canvas.width * 0.35);
+                        targetY = canvas.height / 2 + Math.sin(time * 2) * (canvas.height * 0.25);
+                    }
+                    
+                    // Steer towards target
+                    let dx = targetX - this.x;
+                    let dy = targetY - this.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+                    
+                    // Stronger pull when further away
+                    let pull = dist > 200 ? 0.085 : 0.045;
+                    this.vx += (dx / dist) * pull;
+                    this.vy += (dy / dist) * pull;
+                    
+                    // Wave motion to simulate bees floating in wind
+                    this.vx += Math.sin(this.y * 0.012 + Date.now() * 0.003) * 0.18;
+                    this.vy += Math.cos(this.x * 0.012 + Date.now() * 0.003) * 0.18;
+                    
+                    // Fluttering buzz jitter
+                    this.vx += (Math.random() - 0.5) * 0.7;
+                    this.vy += (Math.random() - 0.5) * 0.7;
+                    
+                    // Friction/Drag
+                    this.vx *= 0.97;
+                    this.vy *= 0.97;
+                    
+                    // Speed limit
+                    let maxSpeed = 5.8;
+                    let speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+                    if (speed > maxSpeed) {
+                        this.vx = (this.vx / speed) * maxSpeed;
+                        this.vy = (this.vy / speed) * maxSpeed;
+                    }
+                    
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    // Face movement direction (angle)
+                    this.angle = Math.atan2(this.vy, this.vx) + Math.PI / 2;
+                } else {
+                    // Standard floating mode
+                    this.y += this.speedY;
+                    this.angle += this.angleSpeed;
+                    this.x += this.speedX + Math.sin(this.angle) * 0.35;
+                }
+                
+                // Repelled by expand ripples
+                ripplesArray.forEach(ripple => {
+                    let dx = this.x - ripple.x;
+                    let dy = this.y - ripple.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (Math.abs(dist - ripple.radius) < 25 && dist < ripple.maxRadius) {
+                        let forceScalar = (1 - dist / ripple.maxRadius) * ripple.force;
+                        let angleDir = Math.atan2(dy, dx);
+                        this.x += Math.cos(angleDir) * forceScalar;
+                        this.y += Math.sin(angleDir) * forceScalar;
+                    }
+                });
+
+                if (this.isTrail) {
+                    this.opacity -= this.decay * 2.2;
+                } else if (this.y < -20 || (this.isStorm && (this.x < -20 || this.x > canvas.width + 20 || this.y > canvas.height + 20 || this.y < -20))) {
+                    this.y = this.isStorm ? Math.random() * canvas.height : canvas.height + 20;
+                    this.x = Math.random() * canvas.width;
+                    this.opacity = Math.random() * 0.45 + 0.15;
+                    this.vx = Math.random() * 4 - 2;
+                    this.vy = Math.random() * 4 - 2;
+                }
+            }
+
+            draw() {
+                if (this.isStorm) {
+                    ctx.save();
+                    ctx.translate(this.x, this.y);
+                    ctx.rotate(this.angle - Math.PI / 2);
+                    drawHeart(ctx, 0, 0, this.width, this.height, this.color, this.opacity);
+                    ctx.restore();
+                } else {
+                    drawHeart(ctx, this.x, this.y, this.width, this.height, this.color, this.opacity);
+                }
+            }
+        }
+
+        // Particle Class: Wind-blown Cherry Blossoms (sakura)
+        class CherryBlossomParticle {
+            constructor(isStorm = false) {
+                this.x = Math.random() * canvas.width;
+                this.y = isStorm ? Math.random() * canvas.height : -20;
+                this.size = Math.random() * 11 + 6;
+                this.speedY = Math.random() * 0.95 + 0.65;
+                this.speedX = Math.random() * 0.85 - 0.25; 
+                this.opacity = Math.random() * 0.55 + 0.25;
+                this.isStorm = isStorm;
+                
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotationSpeed = Math.random() * 0.035 - 0.017;
+                
+                this.vx = Math.random() * 4 - 2;
+                this.vy = Math.random() * 4 - 2;
+
+                const sakuraColors = ['#fff0f3', '#ffccd5', '#ffb3c1', '#ff8fa3', '#ffa6c9'];
+                this.color = sakuraColors[Math.floor(Math.random() * sakuraColors.length)];
+                
+                this.angle = Math.random() * Math.PI * 2;
+            }
+            update() {
+                if (this.isStorm) {
+                    let targetX, targetY;
+                    if (isPointerDown) {
+                        targetX = pointerX;
+                        targetY = pointerY;
+                    } else {
+                        const time = Date.now() * 0.0012;
+                        targetX = canvas.width / 2 + Math.sin(time) * (canvas.width * 0.35);
+                        targetY = canvas.height / 2 + Math.sin(time * 2) * (canvas.height * 0.25);
+                    }
+                    
+                    let dx = targetX - this.x;
+                    let dy = targetY - this.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+                    
+                    let pull = dist > 200 ? 0.085 : 0.045;
+                    this.vx += (dx / dist) * pull;
+                    this.vy += (dy / dist) * pull;
+                    
+                    this.vx += Math.sin(this.y * 0.012 + Date.now() * 0.003) * 0.18;
+                    this.vy += Math.cos(this.x * 0.012 + Date.now() * 0.003) * 0.18;
+                    
+                    this.vx += (Math.random() - 0.5) * 0.7;
+                    this.vy += (Math.random() - 0.5) * 0.7;
+                    
+                    this.vx *= 0.97;
+                    this.vy *= 0.97;
+                    
+                    let maxSpeed = 5.8;
+                    let speed = Math.sqrt(this.vx*this.vx + this.vy*this.vy);
+                    if (speed > maxSpeed) {
+                        this.vx = (this.vx / speed) * maxSpeed;
+                        this.vy = (this.vy / speed) * maxSpeed;
+                    }
+                    
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    
+                    this.rotation = Math.atan2(this.vy, this.vx) + Math.PI / 2;
+                } else {
+                    this.y += this.speedY;
+                    this.x += this.speedX + Math.sin(this.y * 0.012) * 0.25;
+                    this.rotation += this.rotationSpeed;
+                }
+
+                ripplesArray.forEach(ripple => {
+                    let dx = this.x - ripple.x;
+                    let dy = this.y - ripple.y;
+                    let dist = Math.sqrt(dx*dx + dy*dy);
+                    if (Math.abs(dist - ripple.radius) < 25 && dist < ripple.maxRadius) {
+                        let forceScalar = (1 - dist / ripple.maxRadius) * ripple.force;
+                        let angleDir = Math.atan2(dy, dx);
+                        this.x += Math.cos(angleDir) * forceScalar;
+                        this.y += Math.sin(angleDir) * forceScalar;
+                    }
+                });
+
+                if (this.y > canvas.height + 20 || this.x > canvas.width + 20 || this.x < -20 || this.y < -20) {
+                    this.y = this.isStorm ? Math.random() * canvas.height : -20;
+                    this.x = Math.random() * canvas.width;
+                    this.opacity = Math.random() * 0.55 + 0.25;
+                    this.vx = Math.random() * 4 - 2;
+                    this.vy = Math.random() * 4 - 2;
+                }
+            }
+            draw() {
+                drawCherryBlossom(ctx, this.x, this.y, this.size, this.rotation, this.opacity, this.color);
+            }
+        }
+
+        // Particle Class: Shimmering Stardust
+        class StardustParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.opacity = Math.random() * 0.6 + 0.2;
+                this.speed = Math.random() * 0.025 + 0.005;
+            }
+            update() {
+                this.opacity += this.speed;
+                if (this.opacity > 0.85 || this.opacity < 0.15) {
+                    this.speed = -this.speed;
+                }
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#f4e3c1';
+                ctx.shadowBlur = 4;
+                ctx.shadowColor = '#ffd700';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Particle Class: Smoke puffs
+        class SmokeParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 4;
+                this.speedY = -(Math.random() * 1.5 + 0.5);
+                this.speedX = Math.random() * 0.8 - 0.4;
+                this.opacity = 0.75;
+                this.decay = Math.random() * 0.015 + 0.01;
+            }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.size += 0.25; 
+                this.opacity -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = '#f5eef0';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Particle Class: Paper Lanterns
+        class LanternParticle {
+            constructor(x, y, text) {
+                this.x = x;
+                this.y = y;
+                this.text = text;
+                this.width = 65;
+                this.height = 80;
+                this.speedY = -(Math.random() * 0.75 + 0.65);
+                this.swaySpeed = Math.random() * 0.02 + 0.01;
+                this.swayAngle = Math.random() * Math.PI;
+                this.opacity = 0; // Starts invisible, fades in
+                this.decay = 0.0018; 
+                this.age = 0;
+            }
+            update() {
+                this.y += this.speedY;
+                this.swayAngle += this.swaySpeed;
+                this.x += Math.sin(this.swayAngle) * 0.45;
+                this.age += 1;
+                
+                // Fade in during the first 60 frames (1 second)
+                if (this.age < 60) {
+                    this.opacity = this.age / 60;
+                } else {
+                    // Decay opacity after 1 second
+                    this.opacity -= this.decay;
+                }
+            }
+            draw() {
+                if (this.opacity <= 0) return;
+                ctx.save();
+                
+                // First 120 frames (2 seconds) -> apply blur effect
+                if (this.age < 120) {
+                    const blurProgress = this.age / 120;
+                    const blurAmount = (1 - blurProgress) * 7.5;
+                    ctx.filter = `blur(${blurAmount.toFixed(1)}px)`;
+                } else {
+                    ctx.filter = 'none';
+                }
+                
+                ctx.globalAlpha = this.opacity;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = 'rgba(255, 160, 50, 0.8)';
+                
+                ctx.fillStyle = 'rgba(255, 120, 45, 0.95)';
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(this.x - this.width/2, this.y - this.height/2, this.width, this.height, [8, 8, 4, 4]);
+                } else {
+                    ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+                }
+                ctx.fill();
+                
+                ctx.fillStyle = '#222';
+                ctx.fillRect(this.x - this.width/2 - 2, this.y + this.height/2 - 5, this.width + 4, 5);
+                
+                ctx.fillStyle = 'rgba(255, 235, 180, 0.95)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y + 15, 10, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // High-contrast wish text
+                ctx.font = "bold 11px Montserrat";
+                ctx.textAlign = "center";
+                
+                // Soft white outline for maximum clarity
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.lineWidth = 3.5;
+                ctx.strokeText(this.text, this.x, this.y - 10);
+                
+                // Deep rose-charcoal fill
+                ctx.fillStyle = '#3c000c';
+                ctx.fillText(this.text, this.x, this.y - 10);
+                ctx.restore();
+            }
+        }
+
+        // Particle Class: Shooting Star
+        class ShootingStar {
+            constructor() {
+                this.x = Math.random() * canvas.width * 0.5;
+                this.y = Math.random() * canvas.height * 0.3;
+                this.length = Math.random() * 80 + 50;
+                this.speed = Math.random() * 10 + 12;
+                this.angle = Math.PI / 6; 
+                this.opacity = 1.0;
+                this.decay = 0.015;
+            }
+            update() {
+                this.x += Math.cos(this.angle) * this.speed;
+                this.y += Math.sin(this.angle) * this.speed;
+                this.opacity -= this.decay;
+            }
+            draw() {
+                if (this.opacity <= 0) return;
+                ctx.save();
+                ctx.globalAlpha = this.opacity;
+                let gradient = ctx.createLinearGradient(
+                    this.x, this.y, 
+                    this.x - Math.cos(this.angle) * this.length, 
+                    this.y - Math.sin(this.angle) * this.length
+                );
+                gradient.addColorStop(0, '#ffffff');
+                gradient.addColorStop(0.1, '#ffd700');
+                gradient.addColorStop(1, 'rgba(255,255,255,0)');
+                
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - Math.cos(this.angle) * this.length, this.y - Math.sin(this.angle) * this.length);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        // Particle Class: Burst Confetti
+        class Confetti {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 12 + 6;
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 8.5 + 4.5;
+                this.speedX = Math.cos(angle) * speed;
+                this.speedY = Math.sin(angle) * speed - 3.5; 
+                
+                this.gravity = 0.16;
+                this.friction = 0.98;
+                this.opacity = 1.0;
+                this.decay = Math.random() * 0.007 + 0.004;
+                
+                const colors = ['#e63956', '#f4e3c1', '#ffd700', '#ffcbd5', '#e95d78', '#ffffff'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                this.isHeart = Math.random() < 0.6;
+            }
+            update() {
+                this.speedX *= this.friction;
+                this.speedY += this.gravity;
+                this.speedY *= this.friction;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= this.decay;
+            }
+            draw() {
+                if (this.opacity <= 0) return;
+                
+                if (this.isHeart) {
+                    drawHeart(ctx, this.x, this.y, this.size, this.size, this.color, this.opacity);
+                } else {
+                    ctx.save();
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fillStyle = this.color;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for(let i=0; i<ripplesArray.length; i++) {
+                ripplesArray[i].update();
+                ripplesArray[i].draw();
+                if (ripplesArray[i].radius > ripplesArray[i].maxRadius) {
+                    ripplesArray.splice(i, 1);
+                    i--;
+                }
+            }
+
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+                
+                if (particlesArray[i] instanceof SmokeParticle && particlesArray[i].opacity <= 0) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                } else if (particlesArray[i] instanceof HeartParticle && particlesArray[i].isTrail && particlesArray[i].opacity <= 0) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                } else if (particlesArray[i] instanceof LanternParticle && particlesArray[i].opacity <= 0) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                } else if (particlesArray[i] instanceof ShootingStar && particlesArray[i].opacity <= 0) {
+                    particlesArray.splice(i, 1);
+                    i--;
+                }
+            }
+
+            for (let i = 0; i < confettiArray.length; i++) {
+                confettiArray[i].update();
+                confettiArray[i].draw();
+                
+                if (confettiArray[i].opacity <= 0 || confettiArray[i].y > canvas.height + 20) {
+                    confettiArray.splice(i, 1);
+                    i--;
+                }
+            }
+            
+            requestAnimationFrame(animateParticles);
+        }
+    </script>
+</body>
+</html>
